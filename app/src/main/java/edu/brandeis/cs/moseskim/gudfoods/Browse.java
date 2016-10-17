@@ -48,8 +48,6 @@ public class Browse extends AppCompatActivity {
 
 
 
-
-
         yelpService.findRestaurants(location, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -66,14 +64,7 @@ public class Browse extends AppCompatActivity {
                     @Override
                     public void run() {
 
-
                         CustomAdapter adapter = new CustomAdapter(Browse.this, entries);
-//                        for (int i = 0; i < entries.size(); i++){
-//                            adapter.add(entries.get(i));
-//                        }
-
-                        adapter.add(entries.get(0));
-
                         listView.setAdapter(adapter);
                     }
                 });
@@ -82,13 +73,9 @@ public class Browse extends AppCompatActivity {
             }
         });
 
-
-        //we will upload pictures from yelp using an array adapter
     }
 
-//    public boolean onCreateOptionsMenu(Menu menu){
-//        getMenuInflater().inflate(R.menu.Bro,menu);
-//    }
+
 
 
 }
