@@ -1,0 +1,50 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
+
+    defaultConfig {
+        applicationId "edu.brandeis.cs.moseskim.gudfoods"
+        minSdkVersion 16
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+
+        debug{
+            buildConfigField "String", "YELP_CONSUMER_KEY", YelpConsumerKey
+            buildConfigField "String", "YELP_CONSUMER_SECRET", YelpConsumerSecret
+            buildConfigField "String", "YELP_TOKEN", YelpToken
+            buildConfigField "String", "YELP_TOKEN_SECRET", YelpTokenSecret
+        }
+
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile files('libs/yelp-android-2.0.0.jar')
+    compile files('libs/volley.jar')
+}
+
+dependencies {
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+
+    compile 'se.akerfeldt:okhttp-signpost:1.1.0'
+//    compile 'com.squareup.okhttp3:okhttp:3.0.0-RC1'
+    compile 'oauth.signpost:signpost-core:1.2.1.2'
+
+    compile 'com.squareup.okhttp3:okhttp:3.3.0'
+
+}
