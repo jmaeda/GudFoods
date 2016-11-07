@@ -29,11 +29,13 @@ public class Browse extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browse);
 
+
+
         final YelpService yelpService = new YelpService();
         listView = (ListView) findViewById(R.id.listView);
 
-        String location = "02134"; //we will have to retrieve this info from preferences
-
+        String location = "02453"; //"02134"; //we will have to retrieve this info from preferences
+        String token = getIntent().getExtras().get("token").toString();
 
 //        FoodItem item = new FoodItem("http://pngimg.com/upload/balloon_PNG4969.png");
 //        CustomAdapter adapter = new CustomAdapter(this,entries);
@@ -48,7 +50,7 @@ public class Browse extends AppCompatActivity {
 
 
 
-        yelpService.findRestaurants(location, new Callback() {
+        yelpService.findRestaurants(location, token, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
@@ -56,7 +58,7 @@ public class Browse extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
+                Log.d("Entering","YelpService.findRestaurants/onResponse");
                 entries = yelpService.getItems(response);
 
 
@@ -68,7 +70,7 @@ public class Browse extends AppCompatActivity {
                         listView.setAdapter(adapter);
                     }
                 });
-
+                Log.d("Exiting","YelpService.findRestaurants/onResponse");
 
             }
         });

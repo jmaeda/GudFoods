@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.*;
@@ -47,6 +48,9 @@ public class CustomAdapter extends ArrayAdapter<FoodItem> {
 
         image = (NetworkImageView) convertview.findViewById(R.id.thumbnail);
         image.setImageUrl(item.getImageURL(), AppController.getInstance().getImageLoader());
+
+        TextView nameAndPrice = (TextView) convertview.findViewById(R.id.nameAndPrice);
+        nameAndPrice.setText("" + item.getName() + " " + item.getPrice());
 
 
         return convertview;

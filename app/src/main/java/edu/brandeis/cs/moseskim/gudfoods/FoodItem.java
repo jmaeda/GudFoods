@@ -12,10 +12,14 @@ import java.net.URL;
  */
 public class FoodItem {
 
+    String name;
     String imageURL;
+    String price;
 
-    public FoodItem(String imageURL){
+    public FoodItem(String name, String imageURL, String price){
+        this.name = name;
         this.imageURL = imageURL;
+        this.price = price;
     }
 
 
@@ -38,5 +42,7 @@ public class FoodItem {
     public String getImageURL(){
         return this.imageURL;
     }
+    public String getName(){return this.name;}
+    public String getPrice() {return this.price;}
 
 }
