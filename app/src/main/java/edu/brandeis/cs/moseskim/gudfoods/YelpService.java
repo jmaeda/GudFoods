@@ -47,8 +47,6 @@ public class YelpService {
                 .header("Authorization", "Bearer " + token)
                 .build();
 
-        Log.d("Exiting", "YelpService.findRestaurants");
-
         Call call = client.newCall(request);
         call.enqueue(callback);
     }

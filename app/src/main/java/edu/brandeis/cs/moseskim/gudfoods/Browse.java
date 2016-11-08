@@ -70,8 +70,6 @@ public class Browse extends AppCompatActivity {
                         listView.setAdapter(adapter);
                     }
                 });
-                Log.d("Exiting","YelpService.findRestaurants/onResponse");
-
             }
         });
 
