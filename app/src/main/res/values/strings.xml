@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Gud foods</string>
+    <string name="browse_tab">Browse</string>
+    <string name="swiped_list_tab">Food List</string>
 </resources>

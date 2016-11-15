@@ -14,10 +14,13 @@ android {
     buildTypes {
 
         debug{
-            buildConfigField "String", "YELP_CONSUMER_KEY", YelpConsumerKey
-            buildConfigField "String", "YELP_CONSUMER_SECRET", YelpConsumerSecret
-            buildConfigField "String", "YELP_TOKEN", YelpToken
-            buildConfigField "String", "YELP_TOKEN_SECRET", YelpTokenSecret
+            buildConfigField "String", "V3_CLIENT_ID", "\"jIHCe1e803Yo84Y5xbws2A\""
+            buildConfigField "String", "V3_CLIENT_SECRET", "\"mDCmk9nJOP6no13iaoKj9yuNZoXefmq9DEfuy39pozyOsPYcweK4kndoxyjMRsTu\""
+
+            buildConfigField "String", "YELP_CONSUMER_KEY", "\"BiUxaWoT4I9nv6__5Snj7g\""
+            buildConfigField "String", "YELP_CONSUMER_SECRET", "\"Tmbts0IreLWymQ20AOWN_TKU3fU\""
+            buildConfigField "String", "YELP_TOKEN", "\"Ez3Kn-0nGoXKW7EjPqdk0xRBiGn4VUWY\""
+            buildConfigField "String", "YELP_TOKEN_SECRET", "\"v2eQoZ16fpcytYp2t_m8buMNOyQ\""
         }
 
 
@@ -32,6 +35,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:design:24.2.0'
     compile files('libs/yelp-android-2.0.0.jar')
     compile files('libs/volley.jar')
 }
