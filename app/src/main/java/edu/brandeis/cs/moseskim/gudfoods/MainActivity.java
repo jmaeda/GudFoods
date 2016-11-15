@@ -4,8 +4,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-//import retrofit2.Call;
-//import retrofit2.Response;
 
 import com.yelp.clientlib.connection.YelpAPIFactory;
 import com.yelp.clientlib.connection.YelpAPI;
@@ -14,11 +12,6 @@ import com.yelp.clientlib.entities.Business;
 
 import android.view.View;
 import android.widget.*;
-
-import java.io.IOException;
-import java.util.Set;
-import android.util.Log;
-
 
 
 public class MainActivity extends AppCompatActivity {

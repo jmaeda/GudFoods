@@ -19,13 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Browse">
-            <intent-filter>
-                <action android:name="edu.brandeis.cs.moseskim.gudfoods.Browse"></action>
-
-                <category android:name="android.intent.category.DEFAULT" ></category>
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

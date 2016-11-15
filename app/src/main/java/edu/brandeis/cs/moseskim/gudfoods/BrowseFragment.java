@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,34 +25,61 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+
 public class BrowseFragment extends Fragment {
 
-    private View rootView;
-    String token;
     Button button;
+    ArrayList<FoodItem> entries = new ArrayList<FoodItem>();
+    ListView listView;
+    String location;
+    String token;
+    private View rootView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.browse_fragment, container, false);
-        token = null;
+        new GetYelpToken().execute();
         button = (Button) rootView.findViewById(R.id.browse);
 
+        final YelpService yelpService = new YelpService();
+        listView = (ListView) rootView.findViewById(R.id.listView);
+        location = "02453"; //we will have to retrieve this info from preferences
+
+        //set method to get photos onclick
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new GetYelpToken().execute();
-                Intent intent = new Intent("edu.brandeis.cs.moseskim.gudfoods.Browse");
-                if(token == null){
-                    intent.putExtra("token", "null");
-                } else {
-                    intent.putExtra("token", token);
-                }
-                startActivity(intent);
+                yelpService.findRestaurants(location, token, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Log.d("Entering","YelpService.findRestaurants/onResponse");
+                        entries = yelpService.getItems(response);
+
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                CustomAdapter adapter = new CustomAdapter(getActivity(), entries);
+                                listView.setAdapter(adapter);
+                            }
+                        });
+                    }
+                });
             }
         });
 
