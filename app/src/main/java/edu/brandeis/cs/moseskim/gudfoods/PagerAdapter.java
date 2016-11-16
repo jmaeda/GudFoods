@@ -26,6 +26,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 1:
                 SwipedListFragment tab2 = new SwipedListFragment();
                 return tab2;
+            case 2:
+                TrendingFragment tab3 = new TrendingFragment();
+                return tab3;
             default:
                 return null;
         }
