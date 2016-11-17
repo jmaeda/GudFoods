@@ -19,4 +19,7 @@
 
     <string name="facebook_id">547694018773328</string>
     <string name="fb_login_protocol_scheme">fb547694018773328</string>
+
+    <string name="search_button">Find Food!</string>
+    <string name="settings_button">Settings</string>
 </resources>
