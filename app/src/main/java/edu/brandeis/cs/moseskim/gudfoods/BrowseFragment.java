@@ -4,7 +4,7 @@ package edu.brandeis.cs.moseskim.gudfoods;
  * Created by Jon on 11/15/2016.
  */
 
-import android.content.Intent;
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import edu.brandeis.cs.moseskim.gudfoods.aws.AWSService;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -38,10 +39,12 @@ import okhttp3.Response;
 public class BrowseFragment extends Fragment {
 
     Button button;
+    Button settings;
     ArrayList<FoodItem> entries = new ArrayList<FoodItem>();
     ListView listView;
     String location;
     String token;
+    String username;
     private View rootView;
 
     @Override
@@ -49,10 +52,12 @@ public class BrowseFragment extends Fragment {
         rootView = inflater.inflate(R.layout.browse_fragment, container, false);
         new GetYelpToken().execute();
         button = (Button) rootView.findViewById(R.id.browse);
+        settings = (Button) rootView.findViewById(R.id.signout);
 
         final YelpService yelpService = new YelpService();
         listView = (ListView) rootView.findViewById(R.id.listView);
         location = "02453"; //we will have to retrieve this info from preferences
+        username = getArguments().getString("username");
 
         //set method to get photos onclick
         button.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +85,16 @@ public class BrowseFragment extends Fragment {
                         });
                     }
                 });
+            }
+        });
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AWSService.getPool().getUser(username).signOut();
+                AWSService.setUser("");
+                getActivity().setResult(Activity.RESULT_OK);
+                getActivity().finish();
             }
         });
 
