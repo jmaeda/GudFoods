@@ -7,6 +7,8 @@ package edu.brandeis.cs.moseskim.gudfoods;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +32,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -43,16 +46,17 @@ public class BrowseFragment extends Fragment {
     String location;
     String token;
     private View rootView;
+    YelpService yelpService;
+    AsyncTask getYelpToken;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.browse_fragment, container, false);
-        new GetYelpToken().execute();
         button = (Button) rootView.findViewById(R.id.browse);
-
-        final YelpService yelpService = new YelpService();
+        yelpService = new YelpService();
         listView = (ListView) rootView.findViewById(R.id.listView);
         location = "02453"; //we will have to retrieve this info from preferences
+        getYelpToken = new GetYelpToken().execute();
 
         //set method to get photos onclick
         button.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +86,6 @@ public class BrowseFragment extends Fragment {
                 });
             }
         });
-
         return rootView;
     }
 
@@ -171,12 +174,33 @@ public class BrowseFragment extends Fragment {
             } else {
                 try {
                     JSONObject obj = new JSONObject(s);
-                    String accessToken = obj.getString("access_token");
-                    token = accessToken;
+                    token = obj.getString("access_token");
                 } catch (JSONException e){
                     Log.d("JSONException", e.toString());
                 }
                 Log.d("response", token);
+                yelpService.findRestaurants(location, token, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Log.d("findRestaurants","OnResponse");
+                        entries = yelpService.getItems(response);
+
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                CustomAdapter adapter = new CustomAdapter(getActivity(), entries);
+                                listView.setAdapter(adapter);
+                            }
+                        });
+                    }
+                });
             }
         }
     }

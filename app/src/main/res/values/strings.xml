@@ -3,4 +3,6 @@
     <string name="browse_tab">Browse</string>
     <string name="swiped_list_tab">Food List</string>
     <string name="trending_tab">Trending</string>
+    <string name="search_button">Find Food!</string>
+    <string name="settings_button">Settings</string>
 </resources>
