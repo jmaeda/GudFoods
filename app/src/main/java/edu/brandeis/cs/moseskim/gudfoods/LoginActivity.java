@@ -266,7 +266,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void findCurrent() {
         CognitoUser user = AWSService.getPool().getCurrentUser();
-        Log.d(TAG, user.getUserId());
         username = user.getUserId();
         if(username != null) {
             AWSService.setUser(username);

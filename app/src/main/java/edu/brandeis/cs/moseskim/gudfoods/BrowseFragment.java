@@ -5,6 +5,7 @@ package edu.brandeis.cs.moseskim.gudfoods;
  */
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -51,6 +52,7 @@ public class BrowseFragment extends Fragment {
     private View rootView;
     YelpService yelpService;
     AsyncTask getYelpToken;
+    ProgressDialog pDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,6 +63,9 @@ public class BrowseFragment extends Fragment {
         listView = (ListView) rootView.findViewById(R.id.listView);
         location = "02453"; //we will have to retrieve this info from preferences
         getYelpToken = new GetYelpToken().execute();
+        pDialog = new ProgressDialog(getActivity());
+        pDialog.setMessage("Loading...");
+        pDialog.show();
 
         //set method to get photos onclick
         button.setOnClickListener(new View.OnClickListener() {
@@ -211,6 +216,7 @@ public class BrowseFragment extends Fragment {
 
                                 CustomAdapter adapter = new CustomAdapter(getActivity(), entries);
                                 listView.setAdapter(adapter);
+                                pDialog.dismiss();
                             }
                         });
                     }
