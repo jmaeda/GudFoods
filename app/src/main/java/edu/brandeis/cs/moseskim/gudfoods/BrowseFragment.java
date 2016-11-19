@@ -44,6 +44,7 @@ public class BrowseFragment extends Fragment {
 
     Button button;
     Button settings;
+    ArrayList<String> idList = new ArrayList<String>();
     ArrayList<FoodItem> entries = new ArrayList<FoodItem>();
     ListView listView;
     String location;
@@ -54,6 +55,9 @@ public class BrowseFragment extends Fragment {
     AsyncTask getYelpToken;
     ProgressDialog pDialog;
 
+    Callback entriesCallback;
+    Callback finalCallback;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.browse_fragment, container, false);
@@ -62,15 +66,84 @@ public class BrowseFragment extends Fragment {
         yelpService = new YelpService();
         listView = (ListView) rootView.findViewById(R.id.listView);
         location = "02453"; //we will have to retrieve this info from preferences
+
+        //initialize entriesCallback, to be called after each restaurant api call
+        entriesCallback = new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                entries.addAll(yelpService.getItems(response));
+            }
+        };
+
+        //initialize finalCallback, to be called after final restaurant api call, also updates UI
+        finalCallback = new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                entries.addAll(yelpService.getItems(response));
+                if(response.isSuccessful()) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("uiEntries", "#" + entries.size());
+                            CustomAdapter adapter = new CustomAdapter(getActivity(), entries);
+                            listView.setAdapter(adapter);
+                        }
+                    });
+                    pDialog.dismiss();
+                }
+            }
+        };
+
         getYelpToken = new GetYelpToken().execute();
         pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Loading...");
         pDialog.show();
+        yelpService.findRestaurants(location, token, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.d("findRestaurants","OnResponse");
+
+                //get a list of the restaurant ids using api call response
+                idList = yelpService.getIDList(response);
+
+                //clear entries list
+                if(entries != null) {
+                    entries.clear();
+                }
+
+                //for each id, make an api call and get some pictures, append to entries
+                for (int i = 0; i <idList.size(); i++) {
+                    if (i == idList.size() - 1) {
+                        yelpService.pickImages(idList.get(i), token, finalCallback);
+                    } else {
+                        yelpService.pickImages(idList.get(i), token, entriesCallback);
+                    }
+                }
+            }
+        });
 
         //set method to get photos onclick
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pDialog = new ProgressDialog(getActivity());
+                pDialog.setMessage("Loading...");
+                pDialog.show();
                 yelpService.findRestaurants(location, token, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -79,18 +152,24 @@ public class BrowseFragment extends Fragment {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        Log.d("Entering","YelpService.findRestaurants/onResponse");
-                        entries = yelpService.getItems(response);
+                        Log.d("findRestaurants","OnResponse");
 
+                        //get a list of the restaurant ids using api call response
+                        idList = yelpService.getIDList(response);
 
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                        //clear entries list
+                        if(entries != null) {
+                            entries.clear();
+                        }
 
-                                CustomAdapter adapter = new CustomAdapter(getActivity(), entries);
-                                listView.setAdapter(adapter);
+                        //for each id, make an api call and get some pictures, append to entries
+                        for (int i = 0; i <idList.size(); i++) {
+                            if (i == idList.size() - 1) {
+                                yelpService.pickImages(idList.get(i), token, finalCallback);
+                            } else {
+                                yelpService.pickImages(idList.get(i), token, entriesCallback);
                             }
-                        });
+                        }
                     }
                 });
             }
@@ -112,6 +191,7 @@ public class BrowseFragment extends Fragment {
 
         @Override
         protected String doInBackground(Void... params) {
+
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
             HttpURLConnection conn = null;
@@ -207,18 +287,23 @@ public class BrowseFragment extends Fragment {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         Log.d("findRestaurants","OnResponse");
-                        entries = yelpService.getItems(response);
 
+                        //get a list of the restaurant ids using api call response
+                        idList = yelpService.getIDList(response);
 
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                        //clear entries list
+                        if(entries != null) {
+                            entries.clear();
+                        }
 
-                                CustomAdapter adapter = new CustomAdapter(getActivity(), entries);
-                                listView.setAdapter(adapter);
-                                pDialog.dismiss();
+                        //for each id, make an api call and get some pictures, append to entries
+                        for (int i = 0; i <idList.size(); i++) {
+                            if (i == idList.size() - 1) {
+                                yelpService.pickImages(idList.get(i), token, finalCallback);
+                            } else {
+                                yelpService.pickImages(idList.get(i), token, entriesCallback);
                             }
-                        });
+                        }
                     }
                 });
             }

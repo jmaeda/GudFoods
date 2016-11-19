@@ -27,8 +27,6 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import se.akerfeldt.okhttp.signpost.OkHttpOAuthConsumer;
-import se.akerfeldt.okhttp.signpost.SigningInterceptor;
 
 public class YelpService {
 
@@ -51,6 +49,20 @@ public class YelpService {
         call.enqueue(callback);
     }
 
+    public static void pickImages(String id, String token, Callback callback) {
+        OkHttpClient client = new OkHttpClient();
+
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(Constants.YELP_BASE_BUSINESS_URL_V3 + id).newBuilder();
+        String url = urlBuilder.build().toString();
+
+        Request request= new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + token)
+                .build();
+
+        Call call = client.newCall(request);
+        call.enqueue(callback);
+    }
 
     public ArrayList<FoodItem> getItems(Response response){
         ArrayList<FoodItem> fooditems = new ArrayList<>();
@@ -58,28 +70,19 @@ public class YelpService {
             String jsonData = response.body().string();
             if (response.isSuccessful()) {
                 JSONObject yelpJSON = new JSONObject(jsonData);
-                JSONArray businessesJSON = yelpJSON.getJSONArray("businesses");
-                for (int i = 0; i < businessesJSON.length(); i++) {
-                    JSONObject restaurantJSON = businessesJSON.getJSONObject(i);
-                    String name = restaurantJSON.getString("name");
-                    //String phone = restaurantJSON.optString("display_phone", "Phone not available");
-                    //String website = restaurantJSON.getString("url");
-                    //double rating = restaurantJSON.getDouble("rating");
-                    String imageUrl = restaurantJSON.getString("image_url");
-                    String price = restaurantJSON.getString("price");
-                    //double latitude = restaurantJSON.getJSONObject("location")
-                            //.getJSONObject("coordinate").getDouble("latitude");
-                    //double longitude = restaurantJSON.getJSONObject("location")
-                            //.getJSONObject("coordinate").getDouble("longitude");
-                    //ArrayList<String> address = new ArrayList<>();
-                    //JSONArray addressJSON = restaurantJSON.getJSONObject("location")
-                            //.getJSONArray("display_address");
-                    //for (int y = 0; y < addressJSON.length(); y++) {
-                        //address.add(addressJSON.get(y).toString());
-                    //}
-
-                    FoodItem item = new FoodItem(name, imageUrl, price);
+                String id = yelpJSON.getString("id");
+                String name = yelpJSON.getString("name");
+                Double rating = yelpJSON.getDouble("rating");
+                String price = yelpJSON.getString("price");
+                JSONObject hours = (JSONObject) yelpJSON.getJSONArray("hours").get(0);
+                String open = hours.getString("is_open_now");
+                JSONArray pictures = yelpJSON.getJSONArray("photos");
+                for(int i = 0; i <pictures.length(); i++){
+                    FoodItem item = new FoodItem(name, pictures.get(i).toString(), price, id, rating, open);
                     fooditems.add(item);
+                    if(i>2){
+                        break;
+                    }
                 }
             }
         } catch (IOException e) {
@@ -92,12 +95,32 @@ public class YelpService {
             e.printStackTrace();
         }
 
-
-
         return fooditems;
-
     }
 
+    public ArrayList<String> getIDList(Response response){
+        ArrayList<String> idList = new ArrayList<String>();
+        try {
+            String jsonData = response.body().string();
+            if (response.isSuccessful()) {
+                JSONObject yelpJSON = new JSONObject(jsonData);
+                JSONArray businessesJSON = yelpJSON.getJSONArray("businesses");
+                for (int i = 0; i < businessesJSON.length(); i++) {
+                    JSONObject restaurantJSON = businessesJSON.getJSONObject(i);
+                    String id = restaurantJSON.getString("id");
+                    idList.add(id);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d("Exception","moses");
+        } catch (JSONException e) {
+            Log.d("JSON", "error");
+            e.printStackTrace();
+        }
+
+        return idList;
+    }
 
 
 
