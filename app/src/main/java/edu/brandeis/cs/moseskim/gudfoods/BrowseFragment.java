@@ -4,11 +4,13 @@ package edu.brandeis.cs.moseskim.gudfoods;
  * Created by Jon on 11/15/2016.
  */
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -39,18 +41,25 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import edu.brandeis.cs.moseskim.gudfoods.aws.AWSService;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+
 public class BrowseFragment extends Fragment {
 
     Button button;
+    Button settings;
     ArrayList<FoodItem> entries = new ArrayList<FoodItem>();
     ListView listView;
     String location;
     String token;
+    String username;
     private View rootView;
+    YelpService yelpService;
+    AsyncTask getYelpToken;
+    ProgressDialog pDialog;
 
 
     int windowwidth;
@@ -64,14 +73,19 @@ public class BrowseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.browse_fragment, container, false);
-        new GetYelpToken().execute();
         button = (Button) rootView.findViewById(R.id.browse);
         m_context = getActivity();
 
 
-        final YelpService yelpService = new YelpService();
+        //final YelpService yelpService = new YelpService();
+        settings = (Button) rootView.findViewById(R.id.signout);
+        yelpService = new YelpService();
         listView = (ListView) rootView.findViewById(R.id.listView);
         location = "02453"; //we will have to retrieve this info from preferences
+        getYelpToken = new GetYelpToken().execute();
+        pDialog = new ProgressDialog(getActivity());
+        pDialog.setMessage("Loading...");
+        pDialog.show();
 
         parentView = (RelativeLayout) rootView.findViewById(R.id.layoutview);
         windowwidth = getActivity().getWindowManager().getDefaultDisplay().getWidth();
@@ -94,7 +108,7 @@ public class BrowseFragment extends Fragment {
 
 
                         getActivity().runOnUiThread(new Runnable() {
-                            @Override
+//                            @Override
                             public void run() {
                                 //changes made by alex
 //                                CustomAdapter adapter = new CustomAdapter(getActivity(), entries);
@@ -285,6 +299,15 @@ public class BrowseFragment extends Fragment {
                 });
             }
         });
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AWSService.getPool().getUser(username).signOut();
+                AWSService.setUser("");
+                getActivity().setResult(Activity.RESULT_OK);
+                getActivity().finish();
+            }
+        });
 
         return rootView;
     }
@@ -374,12 +397,34 @@ public class BrowseFragment extends Fragment {
             } else {
                 try {
                     JSONObject obj = new JSONObject(s);
-                    String accessToken = obj.getString("access_token");
-                    token = accessToken;
+                    token = obj.getString("access_token");
                 } catch (JSONException e){
                     Log.d("JSONException", e.toString());
                 }
                 Log.d("response", token);
+                yelpService.findRestaurants(location, token, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Log.d("findRestaurants","OnResponse");
+                        entries = yelpService.getItems(response);
+
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                CustomAdapter adapter = new CustomAdapter(getActivity(), entries);
+                                listView.setAdapter(adapter);
+                                pDialog.dismiss();
+                            }
+                        });
+                    }
+                });
             }
         }
     }

@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "edu.brandeis.cs.moseskim.gudfoods"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -21,6 +21,12 @@ android {
             buildConfigField "String", "YELP_CONSUMER_SECRET", "\"Tmbts0IreLWymQ20AOWN_TKU3fU\""
             buildConfigField "String", "YELP_TOKEN", "\"Ez3Kn-0nGoXKW7EjPqdk0xRBiGn4VUWY\""
             buildConfigField "String", "YELP_TOKEN_SECRET", "\"v2eQoZ16fpcytYp2t_m8buMNOyQ\""
+
+            buildConfigField "String", "AWS_POOL_ID", AWSPoolId
+            buildConfigField "String", "AWS_USER_ID", AWSUserId
+            buildConfigField "String", "AWS_USER_SECRET", AWSUserSecret
+
+            buildConfigField "String", "GudFoods", "\"6165ed831be9256b003e9ab18e33f12d\""
         }
 
 
@@ -51,4 +57,10 @@ dependencies {
 
     compile 'com.squareup.okhttp3:okhttp:3.3.0'
 
+    //AWS
+    compile 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.3.2'
+    compile 'com.amazonaws:aws-android-sdk-cognito:2.3.2'
+
+    // Facebook Login
+    compile 'com.facebook.android:facebook-android-sdk:4.+'
 }

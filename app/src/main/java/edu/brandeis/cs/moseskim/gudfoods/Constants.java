@@ -18,4 +18,7 @@ public class Constants {
 
     public static final String V3_CLIENT_SECRET = "mDCmk9nJOP6no13iaoKj9yuNZoXefmq9DEfuy39pozyOsPYcweK4kndoxyjMRsTu";
     public static final String YELP_BASE_URL_V3 = "https://api.yelp.com/v3/businesses/search?term=food";
+
+    public static final String AWS_POOL_ID = BuildConfig.AWS_POOL_ID;
+    public static final String AWS_USER_ID = BuildConfig.AWS_USER_ID;
 }

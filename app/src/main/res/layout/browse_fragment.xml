@@ -6,7 +6,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Browse"
+        android:text="@string/search_button"
         android:id="@+id/browse"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -15,8 +15,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings"
-        android:id="@+id/settings"
+        android:text="Sign Out"
+        android:id="@+id/signout"
         android:layout_toRightOf="@+id/browse"
         android:layout_alignParentTop="true" />
 

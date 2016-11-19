@@ -1,22 +1,14 @@
 package edu.brandeis.cs.moseskim.gudfoods;
 
 
-import java.util.List;
-
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
-import com.android.volley.toolbox.*;
-
-import com.android.volley.toolbox.ImageLoader;
-
 
 import java.util.ArrayList;
 
