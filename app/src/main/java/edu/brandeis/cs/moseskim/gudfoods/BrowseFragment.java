@@ -4,19 +4,26 @@ package edu.brandeis.cs.moseskim.gudfoods;
  * Created by Jon on 11/15/2016.
  */
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,14 +40,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
 import edu.brandeis.cs.moseskim.gudfoods.aws.AWSService;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class BrowseFragment extends Fragment {
+public class BrowseFragment extends Fragment  {
 
     Button button;
     Button settings;
@@ -48,15 +54,19 @@ public class BrowseFragment extends Fragment {
     ArrayList<FoodItem> entries = new ArrayList<FoodItem>();
     ListView listView;
     String location;
+    String location2;
     String token;
     String username;
     private View rootView;
     YelpService yelpService;
     AsyncTask getYelpToken;
     ProgressDialog pDialog;
+    private static final int MY_PERMISSION_ACCESS_COURSE_LOCATION = 123;
+    MyLocationListener loc;
 
     Callback entriesCallback;
     Callback finalCallback;
+    Callback findRestaurantsCallback;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,7 +75,7 @@ public class BrowseFragment extends Fragment {
         settings = (Button) rootView.findViewById(R.id.signout);
         yelpService = new YelpService();
         listView = (ListView) rootView.findViewById(R.id.listView);
-        location = "02453"; //we will have to retrieve this info from preferences
+        location = "02453";
 
         //initialize entriesCallback, to be called after each restaurant api call
         entriesCallback = new Callback() {
@@ -104,11 +114,8 @@ public class BrowseFragment extends Fragment {
             }
         };
 
-        getYelpToken = new GetYelpToken().execute();
-        pDialog = new ProgressDialog(getActivity());
-        pDialog.setMessage("Loading...");
-        pDialog.show();
-        yelpService.findRestaurants(location, token, new Callback() {
+        //general callback for yelpservice.findRestaurants()
+        findRestaurantsCallback = new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
@@ -135,7 +142,17 @@ public class BrowseFragment extends Fragment {
                     }
                 }
             }
-        });
+        };
+
+//      location2 = "Hayes&cll="+"37.77493,-122.419415";
+        loc = new MyLocationListener();
+        findLocation();
+
+        getYelpToken = new GetYelpToken().execute();
+        pDialog = new ProgressDialog(getActivity());
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+        yelpService.findRestaurants(location, token, findRestaurantsCallback);
 
         //set method to get photos onclick
         button.setOnClickListener(new View.OnClickListener() {
@@ -144,34 +161,9 @@ public class BrowseFragment extends Fragment {
                 pDialog = new ProgressDialog(getActivity());
                 pDialog.setMessage("Loading...");
                 pDialog.show();
-                yelpService.findRestaurants(location, token, new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        Log.d("findRestaurants","OnResponse");
-
-                        //get a list of the restaurant ids using api call response
-                        idList = yelpService.getIDList(response);
-
-                        //clear entries list
-                        if(entries != null) {
-                            entries.clear();
-                        }
-
-                        //for each id, make an api call and get some pictures, append to entries
-                        for (int i = 0; i <idList.size(); i++) {
-                            if (i == idList.size() - 1) {
-                                yelpService.pickImages(idList.get(i), token, finalCallback);
-                            } else {
-                                yelpService.pickImages(idList.get(i), token, entriesCallback);
-                            }
-                        }
-                    }
-                });
+                findLocation();
+                //yelpService.findRestaurants(location, location2, token, new Callback() {
+                yelpService.findRestaurants(location, token, findRestaurantsCallback);
             }
         });
         settings.setOnClickListener(new View.OnClickListener() {
@@ -187,6 +179,55 @@ public class BrowseFragment extends Fragment {
         return rootView;
     }
 
+
+
+    public void findLocation(){
+
+
+        if ( ContextCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(getActivity(),"Permission has been granted",Toast.LENGTH_SHORT).show();
+            LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            Log.d("permission","granted");
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,10,0,loc);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,loc);
+            location2 = "Hayes&cll="+loc.getCoordinates();
+            Toast.makeText(getActivity(),"Location is: " + location2,Toast.LENGTH_SHORT).show();
+
+        }
+
+        else{
+            if (shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_COARSE_LOCATION)){
+                Toast.makeText(getActivity(),"Permission is needed to access location",Toast.LENGTH_SHORT).show();
+            }
+
+            requestPermissions(new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  },this.MY_PERMISSION_ACCESS_COURSE_LOCATION);
+
+        }
+
+
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+
+        if (requestCode == MY_PERMISSION_ACCESS_COURSE_LOCATION){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                findLocation();
+            }
+            else{
+                Toast.makeText(getActivity(),"Permission has been denied",Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        else{
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
     private class GetYelpToken extends AsyncTask<Void, Void, String> {
 
         @Override
@@ -199,6 +240,7 @@ public class BrowseFragment extends Fragment {
 
             // Will contain the raw JSON response as a string.
             String yelpJsonStr = null;
+
 
             try {
                 // Construct the URL
@@ -278,34 +320,7 @@ public class BrowseFragment extends Fragment {
                     Log.d("JSONException", e.toString());
                 }
                 Log.d("response", token);
-                yelpService.findRestaurants(location, token, new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        Log.d("findRestaurants","OnResponse");
-
-                        //get a list of the restaurant ids using api call response
-                        idList = yelpService.getIDList(response);
-
-                        //clear entries list
-                        if(entries != null) {
-                            entries.clear();
-                        }
-
-                        //for each id, make an api call and get some pictures, append to entries
-                        for (int i = 0; i <idList.size(); i++) {
-                            if (i == idList.size() - 1) {
-                                yelpService.pickImages(idList.get(i), token, finalCallback);
-                            } else {
-                                yelpService.pickImages(idList.get(i), token, entriesCallback);
-                            }
-                        }
-                    }
-                });
+                yelpService.findRestaurants(location, token, findRestaurantsCallback);
             }
         }
     }
