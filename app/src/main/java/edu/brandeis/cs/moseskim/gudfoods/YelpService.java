@@ -30,14 +30,18 @@ import okhttp3.Response;
 
 public class YelpService {
 
-    public static void findRestaurants(String location, String token, Callback callback) {
+    public static void findRestaurants(Double latitude, Double longitude, String token, Callback callback) {
         Log.d("Entering", "YelpService.findRestaurants");
         Log.d("Token", "Bearer " + token);
 
         OkHttpClient client = new OkHttpClient();
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse(Constants.YELP_BASE_URL_V3).newBuilder();
-        urlBuilder.addQueryParameter(Constants.YELP_LOCATION_QUERY_PARAMETER, location);
+        //urlBuilder.addQueryParameter("location", location);
+        String lat = "" + latitude;
+        String lon = "" + longitude;
+        urlBuilder.addQueryParameter(Constants.YELP_LATITUDE_PARAMETER, lat);
+        urlBuilder.addQueryParameter(Constants.YELP_LONGITUDE_PARAMETER, lon);
         String url = urlBuilder.build().toString();
 
         Request request= new Request.Builder()
@@ -77,8 +81,11 @@ public class YelpService {
                 JSONObject hours = (JSONObject) yelpJSON.getJSONArray("hours").get(0);
                 String open = hours.getString("is_open_now");
                 JSONArray pictures = yelpJSON.getJSONArray("photos");
+                JSONObject coordinates = yelpJSON.getJSONObject("coordinates");
+                Double longitude = coordinates.getDouble("longitude");
+                Double latitude = coordinates.getDouble("latitude");
                 for(int i = 0; i <pictures.length(); i++){
-                    FoodItem item = new FoodItem(name, pictures.get(i).toString(), price, id, rating, open);
+                    FoodItem item = new FoodItem(name, pictures.get(i).toString(), price, id, rating, open, longitude, latitude);
                     fooditems.add(item);
                     if(i>2){
                         break;

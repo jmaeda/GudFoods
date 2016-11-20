@@ -53,16 +53,17 @@ public class BrowseFragment extends Fragment  {
     ArrayList<String> idList = new ArrayList<String>();
     ArrayList<FoodItem> entries = new ArrayList<FoodItem>();
     ListView listView;
-    String location;
-    String location2;
     String token;
     String username;
+    double latitude;
+    double longitude;
     private View rootView;
     YelpService yelpService;
     AsyncTask getYelpToken;
     ProgressDialog pDialog;
     private static final int MY_PERMISSION_ACCESS_COURSE_LOCATION = 123;
     MyLocationListener loc;
+    LocationManager locManager;
 
     Callback entriesCallback;
     Callback finalCallback;
@@ -75,7 +76,6 @@ public class BrowseFragment extends Fragment  {
         settings = (Button) rootView.findViewById(R.id.signout);
         yelpService = new YelpService();
         listView = (ListView) rootView.findViewById(R.id.listView);
-        location = "02453";
 
         //initialize entriesCallback, to be called after each restaurant api call
         entriesCallback = new Callback() {
@@ -143,16 +143,12 @@ public class BrowseFragment extends Fragment  {
                 }
             }
         };
-
-//      location2 = "Hayes&cll="+"37.77493,-122.419415";
         loc = new MyLocationListener();
-        findLocation();
-
+        locManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
         getYelpToken = new GetYelpToken().execute();
         pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Loading...");
         pDialog.show();
-        yelpService.findRestaurants(location, token, findRestaurantsCallback);
 
         //set method to get photos onclick
         button.setOnClickListener(new View.OnClickListener() {
@@ -162,8 +158,7 @@ public class BrowseFragment extends Fragment  {
                 pDialog.setMessage("Loading...");
                 pDialog.show();
                 findLocation();
-                //yelpService.findRestaurants(location, location2, token, new Callback() {
-                yelpService.findRestaurants(location, token, findRestaurantsCallback);
+                yelpService.findRestaurants(latitude, longitude, token, findRestaurantsCallback);
             }
         });
         settings.setOnClickListener(new View.OnClickListener() {
@@ -183,7 +178,6 @@ public class BrowseFragment extends Fragment  {
 
     public void findLocation(){
 
-
         if ( ContextCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED){
             Toast.makeText(getActivity(),"Permission has been granted",Toast.LENGTH_SHORT).show();
@@ -191,21 +185,22 @@ public class BrowseFragment extends Fragment  {
             Log.d("permission","granted");
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,10,0,loc);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,loc);
-            location2 = "Hayes&cll="+loc.getCoordinates();
-            Toast.makeText(getActivity(),"Location is: " + location2,Toast.LENGTH_SHORT).show();
 
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+
+            Log.d("Lat","" + latitude);
+            Log.d("Long","" + longitude);
         }
 
         else{
             if (shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_COARSE_LOCATION)){
                 Toast.makeText(getActivity(),"Permission is needed to access location",Toast.LENGTH_SHORT).show();
             }
-
             requestPermissions(new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  },this.MY_PERMISSION_ACCESS_COURSE_LOCATION);
-
         }
-
-
     }
 
 
@@ -320,7 +315,8 @@ public class BrowseFragment extends Fragment  {
                     Log.d("JSONException", e.toString());
                 }
                 Log.d("response", token);
-                yelpService.findRestaurants(location, token, findRestaurantsCallback);
+                findLocation();
+                yelpService.findRestaurants(latitude, longitude, token, findRestaurantsCallback);
             }
         }
     }

@@ -16,17 +16,21 @@ public class FoodItem {
     String name;
     String imageURL;
     String price;
+    Double latitude;
+    Double longitude;
     Double rating;
     Boolean open;
 
-    public FoodItem(String name, String imageURL, String price, String id, Double rating, String open){
+    public FoodItem(String name, String imageURL, String price, String id, Double rating, String open, Double longitude, Double latitude){
         this.name = name;
         this.imageURL = imageURL;
         this.price = price;
         this.id = id;
         this.rating = rating;
+        this.longitude = longitude;
+        this.latitude = latitude;
 
-        if(open.equals("True")){
+        if(open.equals("true")){
             this.open = true;
         } else {
             this.open = false;
@@ -57,6 +61,8 @@ public class FoodItem {
     public String getName(){return this.name;}
     public String getPrice() {return this.price;}
     public Double getRating() {return this.rating;}
+    public Double getLatitude() {return this.latitude;}
+    public Double getLongitude() {return this.longitude;}
     public Boolean getOpen() {return this.open;}
 
 }
