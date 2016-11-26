@@ -58,31 +58,6 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         this.finishAffinity();
     }
-
-//    private void getRestaurants(String location) {
-//        final YelpService yelpService = new YelpService();
-//        yelpService.findRestaurants(location, new Callback() {
-//
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                try {
-//                    String jsonData = response.body().string();
-//                    Log.v(TAG, jsonData);
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//
-//    }
-//
-//
 }
 
 

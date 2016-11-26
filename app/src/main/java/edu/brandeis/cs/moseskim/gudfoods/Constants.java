@@ -12,6 +12,12 @@ public class Constants {
     public static final String YELP_BASE_URL = "https://api.yelp.com/v2/search?term=food";
     public static final String YELP_LATITUDE_PARAMETER = "latitude";
     public static final String YELP_LONGITUDE_PARAMETER = "longitude";
+    public static final String YELP_TERM_PARAMETER = "term";
+    public static final String YELP_LIMIT_PARAMETER = "limit";
+    public static final String YELP_LOCATION_PARAMETER = "location";
+    public static final String YELP_PRICE_PARAMETER = "price";
+    public static final String YELP_RADIUS_PARAMETER = "radius";
+
 
 //    public static final String V3_CLIENT_ID = BuildConfig.V3_CLIENT_ID;
     public static final String V3_CLIENT_ID = "jIHCe1e803Yo84Y5xbws2A";

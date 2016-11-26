@@ -3,6 +3,7 @@
     package="edu.brandeis.cs.moseskim.gudfoods">
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
@@ -21,6 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity">
+        </activity>
+        <activity android:name=".AdvancedSearchActivity">
         </activity>
         <activity
             android:name=".aws.RegisterUser" />

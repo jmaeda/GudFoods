@@ -21,5 +21,28 @@
     <string name="fb_login_protocol_scheme">fb547694018773328</string>
 
     <string name="search_button">Find Food!</string>
+    <string name="advanced_search">Filtered Search</string>
     <string name="settings_button">Settings</string>
+
+    <string name="location_label">Location:</string>
+    <string name="price_label">Max Price:</string>
+    <string name="rating_label">Min Rating:</string>
+    <string name="radius_label">Search Range:</string>
+
+    <string name="four_dollar">$$$$ (Default)</string>
+    <string name="three_dollar">$$$</string>
+    <string name="two_dollar">$$</string>
+    <string name="one_dollar">$</string>
+
+    <string name="one_star">1 Star (Default)</string>
+    <string name="two_star">2 Stars</string>
+    <string name="three_star">3 Stars</string>
+    <string name="four_star">4 Stars</string>
+    <string name="five_star">5 Stars</string>
+
+    <string name="ten_mile">10 Miles (Default)</string>
+    <string name="five_mile">5 Miles</string>
+    <string name="two_mile">2 Miles</string>
+    <string name="one_mile">1 Mile</string>
+
 </resources>
