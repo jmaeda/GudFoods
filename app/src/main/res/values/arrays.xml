@@ -7,6 +7,13 @@
         <item>@string/one_dollar</item>
     </array>
 
+    <array name="minPriceArray">
+        <item>@string/min_one_dollar</item>
+        <item>@string/two_dollar</item>
+        <item>@string/three_dollar</item>
+        <item>@string/min_four_dollar</item>
+    </array>
+
     <array name="ratingArray">
         <item>@string/one_star</item>
         <item>@string/two_star</item>

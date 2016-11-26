@@ -23,6 +23,7 @@ public class AdvancedSearchActivity extends AppCompatActivity{
     Button submit;
     EditText location;
     Spinner price;
+    Spinner minPrice;
     Spinner rating;
     Spinner radius;
 
@@ -45,6 +46,7 @@ public class AdvancedSearchActivity extends AppCompatActivity{
         submit = (Button) findViewById(R.id.submit_search);
         location = (EditText) findViewById(R.id.location_text);
         price = (Spinner) findViewById(R.id.price_spinner);
+        minPrice = (Spinner) findViewById(R.id.min_price_spinner);
         rating = (Spinner) findViewById(R.id.rating_spinner);
         radius = (Spinner) findViewById(R.id.radius_spinner);
 
@@ -77,16 +79,27 @@ public class AdvancedSearchActivity extends AppCompatActivity{
         price.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String text = price.getSelectedItem().toString();
-                if(text.equals("$$$$ (Default)")){
-                    returnIntent.putExtra("price","1,2,3,4");
-                } else if(text.equals("$$$")){
-                    returnIntent.putExtra("price","1,2,3");
-                } else if(text.equals("$$")){
-                    returnIntent.putExtra("price","1,2");
-                } else if(text.equals("$")){
-                    returnIntent.putExtra("price","1");
-                }
+                String maxPrice = price.getSelectedItem().toString();
+                String minPriceString = minPrice.getSelectedItem().toString();
+                setPriceExtra(maxPrice,minPriceString);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
+
+        });
+
+        //setup min price spinner
+        ArrayAdapter<CharSequence> minPriceAdapter = ArrayAdapter.createFromResource(this,
+                R.array.minPriceArray , android.R.layout.simple_spinner_item);
+        minPrice.setAdapter(minPriceAdapter);
+        minPrice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String maxPrice = price.getSelectedItem().toString();
+                String minPriceString = minPrice.getSelectedItem().toString();
+                setPriceExtra(maxPrice,minPriceString);
             }
 
             @Override
@@ -155,5 +168,39 @@ public class AdvancedSearchActivity extends AppCompatActivity{
                 finish();
             }
         });
+    }
+
+    public void setPriceExtra(String max, String min){
+        int start;
+        int end;
+        if(max.equals("$$$$ (Default")){
+            end = 4;
+        } else if (max.equals("$$$")){
+            end = 3;
+        } else if (max.equals("$$")) {
+            end = 2;
+        } else {
+            end = 1;
+        }
+
+        if(min.equals("$ (Default")){
+            start = 1;
+        } else if (min.equals("$$")){
+            start = 2;
+        } else if (min.equals("$$$")){
+            start = 3;
+        } else {
+            start = 4;
+        }
+
+        String priceString = "";
+        for(int i = start; i <= end; i++){
+            if(i == start){
+                priceString = "" + i;
+            } else {
+                priceString = priceString + "," + i;
+            }
+        }
+        returnIntent.putExtra("price",priceString);
     }
 }
