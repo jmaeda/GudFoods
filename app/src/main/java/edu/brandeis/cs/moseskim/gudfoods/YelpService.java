@@ -13,13 +13,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -37,11 +30,42 @@ public class YelpService {
         OkHttpClient client = new OkHttpClient();
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse(Constants.YELP_BASE_URL_V3).newBuilder();
-        //urlBuilder.addQueryParameter("location", location);
         String lat = "" + latitude;
         String lon = "" + longitude;
         urlBuilder.addQueryParameter(Constants.YELP_LATITUDE_PARAMETER, lat);
         urlBuilder.addQueryParameter(Constants.YELP_LONGITUDE_PARAMETER, lon);
+        urlBuilder.addQueryParameter(Constants.YELP_RADIUS_PARAMETER, "16093");
+        urlBuilder.addQueryParameter(Constants.YELP_LIMIT_PARAMETER, "30");
+        String url = urlBuilder.build().toString();
+
+        Request request= new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + token)
+                .build();
+
+        Call call = client.newCall(request);
+        call.enqueue(callback);
+    }
+
+    public static void advancedSearch(Double longitude, Double latitude, Boolean flag, String location, String price, String radius, String token, Callback callback) {
+        Log.d("Token", "Bearer " + token);
+
+        OkHttpClient client = new OkHttpClient();
+
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(Constants.YELP_BASE_URL_V3).newBuilder();
+
+        if(flag == true){
+            String lat = "" + latitude;
+            String lon = "" + longitude;
+            urlBuilder.addQueryParameter(Constants.YELP_LATITUDE_PARAMETER, lat);
+            urlBuilder.addQueryParameter(Constants.YELP_LONGITUDE_PARAMETER, lon);
+        } else {
+            urlBuilder.addQueryParameter(Constants.YELP_LOCATION_PARAMETER,location);
+        }
+
+        urlBuilder.addQueryParameter(Constants.YELP_PRICE_PARAMETER, price);
+        urlBuilder.addQueryParameter(Constants.YELP_RADIUS_PARAMETER, radius);
+        urlBuilder.addQueryParameter(Constants.YELP_LIMIT_PARAMETER, "30");
         String url = urlBuilder.build().toString();
 
         Request request= new Request.Builder()
