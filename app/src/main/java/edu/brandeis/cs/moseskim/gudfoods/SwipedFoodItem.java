@@ -10,7 +10,7 @@ import java.net.URL;
 /**
  * Created by moseskim on 10/16/16.
  */
-public class FoodItem {
+public class SwipedFoodItem {
 
     String id;
     String name;
@@ -21,7 +21,7 @@ public class FoodItem {
     Double rating;
     Boolean open;
 
-    public FoodItem(String name, String imageURL, String price, String id, Double rating, String open, Double longitude, Double latitude){
+    public SwipedFoodItem(String name, String imageURL, String price, String id, Double rating, String open, Double longitude, Double latitude){
         this.name = name;
         this.imageURL = imageURL;
         this.price = price;

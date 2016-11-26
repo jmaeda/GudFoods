@@ -22,9 +22,9 @@ android {
             buildConfigField "String", "YELP_TOKEN", "\"Ez3Kn-0nGoXKW7EjPqdk0xRBiGn4VUWY\""
             buildConfigField "String", "YELP_TOKEN_SECRET", "\"v2eQoZ16fpcytYp2t_m8buMNOyQ\""
 
-            buildConfigField "String", "AWS_POOL_ID", AWSPoolId
-            buildConfigField "String", "AWS_USER_ID", AWSUserId
-            buildConfigField "String", "AWS_USER_SECRET", AWSUserSecret
+            buildConfigField "String", "AWS_POOL_ID", "\"us-east-1_88qMJolbn\""
+            buildConfigField "String", "AWS_USER_ID", "\"1ssmijkc9rb9s1dstlp4umivhn\""
+            buildConfigField "String", "AWS_USER_SECRET", "\"1l4png6mjtme9jjau1juutaltvgv012ochl9pgcimo31rqcjo459\""
 
             buildConfigField "String", "GudFoods", "\"6165ed831be9256b003e9ab18e33f12d\""
         }
