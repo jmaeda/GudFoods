@@ -8,6 +8,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -53,12 +54,15 @@ import okhttp3.Response;
 public class BrowseFragment extends Fragment  {
 
     private Button button;
+    private Button advanced;
     private Button settings;
     private ArrayList<String> idList = new ArrayList<String>();
     private ArrayList<FoodItem> entries = new ArrayList<FoodItem>();
     private ListView listView;
     private String token;
     private String username;
+    private String rating;
+
     double latitude;
     double longitude;
     private View rootView;
@@ -82,6 +86,7 @@ public class BrowseFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.browse_fragment, container, false);
         button = (Button) rootView.findViewById(R.id.browse);
+        advanced = (Button) rootView.findViewById(R.id.advanced_search);
         settings = (Button) rootView.findViewById(R.id.signout);
         yelpService = new YelpService();
         listView = (ListView) rootView.findViewById(R.id.listView);
@@ -121,8 +126,8 @@ public class BrowseFragment extends Fragment  {
                             listView.setAdapter(adapter);
                         }
                     });
-                    pDialog.dismiss();
                 }
+                pDialog.dismiss();
             }
         };
 
@@ -157,20 +162,26 @@ public class BrowseFragment extends Fragment  {
         };
         loc = new MyLocationListener();
         locManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-        getYelpToken = new GetYelpToken().execute();
         pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Loading...");
+        pDialog.setCanceledOnTouchOutside(false);
         pDialog.show();
+        getYelpToken = new GetYelpToken().execute();
 
         //set method to get photos onclick
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pDialog = new ProgressDialog(getActivity());
-                pDialog.setMessage("Loading...");
                 pDialog.show();
                 findLocation();
                 yelpService.findRestaurants(latitude, longitude, token, findRestaurantsCallback);
+            }
+        });
+        advanced.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AdvancedSearchActivity.class);
+                startActivityForResult(intent, 1);
             }
         });
         settings.setOnClickListener(new View.OnClickListener() {
@@ -196,6 +207,25 @@ public class BrowseFragment extends Fragment  {
     }
 
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            String location = (String) data.getExtras().get("location");
+            Boolean flag = false;
+            if(location.equals("") || location.equals("current")){
+               findLocation();
+                flag = true;
+            }
+
+            rating = (String) data.getExtras().get("rating");
+            String price = (String) data.getExtras().get("price");
+            String radius = (String) data.getExtras().get("radius");
+
+            pDialog.show();
+            yelpService.advancedSearch(longitude, latitude, flag, location, price, radius, token, findRestaurantsCallback);
+        }
+    }
 
     public void findLocation(){
 
