@@ -58,7 +58,7 @@ public class AWSService {
     /**
      * Add your pool id here
      */
-    private static final String userPoolId = BuildConfig.AWS_POOL_ID;
+    private static final String userPoolId = "us-east-1_88qMJolbn";
 
     /**
      * Add you app id
@@ -134,13 +134,6 @@ public class AWSService {
         return signUpFieldsC2O;
     }
 
-    public static Map<String, String> getSignUpFieldsO2C() {
-        return signUpFieldsO2C;
-    }
-
-    public static List<String> getAttributeDisplaySeq() {
-        return attributeDisplaySeq;
-    }
 
     public static void setCurrSession(CognitoUserSession session) {
         currSession = session;

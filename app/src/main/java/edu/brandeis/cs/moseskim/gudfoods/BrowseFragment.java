@@ -10,7 +10,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -42,32 +42,41 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.brandeis.cs.moseskim.gudfoods.aws.AWSService;
+import edu.brandeis.cs.moseskim.gudfoods.aws.AmazonClientManager;
+import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManager;
+import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerTaskResult;
+import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerType;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 public class BrowseFragment extends Fragment  {
 
-    Button button;
-    Button settings;
-    ArrayList<String> idList = new ArrayList<String>();
-    ArrayList<FoodItem> entries = new ArrayList<FoodItem>();
-    ListView listView;
-    String token;
-    String username;
+    private Button button;
+    private Button settings;
+    private ArrayList<String> idList = new ArrayList<String>();
+    private ArrayList<FoodItem> entries = new ArrayList<FoodItem>();
+    private ListView listView;
+    private String token;
+    private String username;
     double latitude;
     double longitude;
     private View rootView;
-    YelpService yelpService;
-    AsyncTask getYelpToken;
-    ProgressDialog pDialog;
+    private YelpService yelpService;
+    private AsyncTask getYelpToken;
+    private ProgressDialog pDialog;
     private static final int MY_PERMISSION_ACCESS_COURSE_LOCATION = 123;
-    MyLocationListener loc;
-    LocationManager locManager;
+    private MyLocationListener loc;
+    private LocationManager locManager;
+    private DynamoDBManager dynamoDBHelper;
 
-    Callback entriesCallback;
-    Callback finalCallback;
-    Callback findRestaurantsCallback;
+    private Callback entriesCallback;
+    private Callback finalCallback;
+    private Callback findRestaurantsCallback;
+
+    public static AmazonClientManager clientManager = null;
+    private FoodItem fi;
+    private boolean isSwipeRight;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,6 +85,9 @@ public class BrowseFragment extends Fragment  {
         settings = (Button) rootView.findViewById(R.id.signout);
         yelpService = new YelpService();
         listView = (ListView) rootView.findViewById(R.id.listView);
+        username = getArguments().getString("username");
+
+        clientManager = new AmazonClientManager(this.getActivity());
 
         //initialize entriesCallback, to be called after each restaurant api call
         entriesCallback = new Callback() {
@@ -168,6 +180,15 @@ public class BrowseFragment extends Fragment  {
                 AWSService.setUser("");
                 getActivity().setResult(Activity.RESULT_OK);
                 getActivity().finish();
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                fi = entries.get(position);
+                isSwipeRight = true;
+                new DynamoDBInsertUserSwipeTask().execute(DynamoDBManagerType.INSERT_USER_SWIPE);
             }
         });
 
@@ -320,4 +341,41 @@ public class BrowseFragment extends Fragment  {
             }
         }
     }
+
+    private class DynamoDBInsertUserSwipeTask extends
+            AsyncTask<DynamoDBManagerType, Void, DynamoDBManagerTaskResult> {
+
+        protected DynamoDBManagerTaskResult doInBackground(
+                DynamoDBManagerType... types) {
+
+            String tableStatus = DynamoDBManager.getTestTableStatus();
+
+            DynamoDBManagerTaskResult result = new DynamoDBManagerTaskResult();
+            result.setTableStatus(tableStatus);
+            result.setTaskType(types[0]);
+            if (types[0] == DynamoDBManagerType.INSERT_USER_SWIPE) {
+                if (tableStatus.equalsIgnoreCase("ACTIVE")) {
+                    DynamoDBManager.incrementFoodItem(fi, isSwipeRight);
+                    DynamoDBManager.insertUserSwipe(username, fi.getImageURL(), isSwipeRight);
+                }
+            }
+
+            return result;
+        }
+
+        protected void onPostExecute(DynamoDBManagerTaskResult result) {
+            if (result.getTaskType() == DynamoDBManagerType.LIST_USERS_SWIPES
+                    && result.getTableStatus().equalsIgnoreCase("ACTIVE")) {
+                new DynamoDBInsertUserSwipeTask().execute(DynamoDBManagerType.LIST_USERS_SWIPES);
+            } else if (!result.getTableStatus().equalsIgnoreCase("ACTIVE")) {
+                Toast.makeText(
+                        BrowseFragment.this.getActivity(),
+                        "The test table is not ready yet.\nTable Status: "
+                                + result.getTableStatus(), Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
+    }
+
+
 }
