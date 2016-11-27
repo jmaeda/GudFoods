@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:id="@+id/layoutview"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     >
+
+    <Button
+        android:id="@+id/buttonSwipeLeft"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:textColor="#ff0000"
+        android:text="No"/>
+
+    <Button
+        android:id="@+id/buttonSwipeRight"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:textColor="#00ff00"
+        android:text="Yes"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -28,11 +50,14 @@
         android:layout_toRightOf="@+id/advanced_search"
         android:layout_alignParentTop="true" />
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listView"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/browse" />
+    <link.fls.swipestack.SwipeStack
+        android:id="@+id/swipeStack"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/browse"
+        android:layout_above="@+id/buttonSwipeLeft"
+        android:padding="@dimen/padding_swipestack"
+        app:stack_rotation="10"
+        app:stack_size="3"/>
 
 </RelativeLayout>

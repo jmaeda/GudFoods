@@ -15,16 +15,20 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.toolbox.NetworkImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,12 +47,15 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.brandeis.cs.moseskim.gudfoods.aws.AWSService;
+import link.fls.swipestack.SwipeStack;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 
-public class BrowseFragment extends Fragment {
+
+
+public class BrowseFragment extends Fragment{
 
     Button button;
     Button advanced;
@@ -75,22 +82,69 @@ public class BrowseFragment extends Fragment {
 
 
 
-    int windowwidth;
-    int screenCenter;
-    int x_cord, y_cord, x, y;
-    int Likes = 0;
-    RelativeLayout parentView;
-    float alphaValue = 0;
-    private Context m_context;
+
+    private Button mButtonLeft, mButtonRight;
+    private FloatingActionButton mFab;
+    private SwipeStack mSwipeStack;
+    private SwipeStackAdapter mAdapter;
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d("TEST 1","TESTING");
+
         rootView = inflater.inflate(R.layout.browse_fragment, container, false);
         button = (Button) rootView.findViewById(R.id.browse);
         advanced = (Button) rootView.findViewById(R.id.advanced_search);
         settings = (Button) rootView.findViewById(R.id.signout);
         yelpService = new YelpService();
-        listView = (ListView) rootView.findViewById(R.id.listView);
+
+
+
+        //============
+        mButtonLeft = (Button) rootView.findViewById(R.id.buttonSwipeLeft);
+        mButtonLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSwipeStack.swipeTopViewToLeft();
+            }
+        });
+        mButtonRight = (Button) rootView.findViewById(R.id.buttonSwipeRight);
+        mButtonRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSwipeStack.swipeTopViewToRight();
+            }
+        });
+
+        mSwipeStack = (SwipeStack) rootView.findViewById(R.id.swipeStack);
+        mSwipeStack.setListener(new SwipeStack.SwipeStackListener() {
+            @Override
+            public void onViewSwipedToLeft(int position) {
+                FoodItem swipedElement = mAdapter.getItem(position);
+                Toast.makeText(getContext(), getString(R.string.view_swiped_left, swipedElement.getName()),
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onViewSwipedToRight(int position) {
+                FoodItem swipedElement = mAdapter.getItem(position);
+                Toast.makeText(getContext(), getString(R.string.view_swiped_right, swipedElement.getName()),
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStackEmpty() {
+                Toast.makeText(getContext(), R.string.stack_empty, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        //============
+
+//        listView = (ListView) rootView.findViewById(R.id.listView);
 
         //initialize entriesCallback, to be called after each restaurant api call
         entriesCallback = new Callback() {
@@ -120,8 +174,11 @@ public class BrowseFragment extends Fragment {
                         @Override
                         public void run() {
                             Log.d("uiEntries", "#" + entries.size());
-                            CustomAdapter adapter = new CustomAdapter(getActivity(), entries);
-                            listView.setAdapter(adapter);
+                            Log.d("RIGHT BEFORE ADAPT", "SOMETHING HAPPENING PLEASE");
+
+                            mAdapter = new SwipeStackAdapter(getActivity(), entries);
+                            mSwipeStack.setAdapter(mAdapter);
+//                            mSwipeStack.setListener(this);
                         }
                     });
                 }
@@ -367,6 +424,111 @@ public class BrowseFragment extends Fragment {
                 findLocation();
                 yelpService.findRestaurants(latitude, longitude, token, findRestaurantsCallback);
             }
+        }
+
+    }
+
+    public void onClick(View v) {
+        if (v.equals(mButtonLeft)) {
+            mSwipeStack.swipeTopViewToLeft();
+        } else if (v.equals(mButtonRight)) {
+            mSwipeStack.swipeTopViewToRight();
+        } else if (v.equals(mFab)) {
+//            mData.add(getString(R.string.dummy_fab));
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//        switch (item.getItemId()) {
+//            case R.id.menuReset:
+//                mSwipeStack.resetStack();
+//                Snackbar.make(mFab, R.string.stack_reset, Snackbar.LENGTH_SHORT).show();
+//                return true;
+//            case R.id.menuGitHub:
+//                Intent browserIntent = new Intent(
+//                        Intent.ACTION_VIEW, Uri.parse("https://github.com/flschweiger/SwipeStack"));
+//                startActivity(browserIntent);
+//                return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
+
+//    @Override
+//    public void onViewSwipedToRight(int position) {
+//        FoodItem swipedElement = mAdapter.getItem(position);
+//        Toast.makeText(getContext(), getString(R.string.view_swiped_right, swipedElement.getName()),
+//                Toast.LENGTH_SHORT).show();
+//    }
+//
+//    @Override
+//    public void onViewSwipedToLeft(int position) {
+//        Log.d("TEST33333333333", "TESTING THE ONVIEWSWIPEDTOLEFT PLEASE WORK");
+//        FoodItem swipedElement = mAdapter.getItem(position);
+//        Toast.makeText(getContext(), getString(R.string.view_swiped_left, swipedElement.getName()),
+//                Toast.LENGTH_SHORT).show();
+//    }
+//    @Override
+//    public void onStackEmpty() {
+//        Toast.makeText(getContext(), R.string.stack_empty, Toast.LENGTH_SHORT).show();
+//    }
+
+    public class SwipeStackAdapter extends ArrayAdapter<FoodItem> {
+
+        private ArrayList<FoodItem> foodEntries;
+
+        public SwipeStackAdapter(Context context, ArrayList<FoodItem> array){
+            super(context,R.layout.cards,array);
+            this.foodEntries = array;
+        }
+
+        @Override
+        public int getCount() {
+            return foodEntries.size();
+        }
+
+        @Override
+        public FoodItem getItem(int position) {
+            return foodEntries.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            NetworkImageView image;
+
+            FoodItem item = getItem(position);
+
+            if (convertView == null) {
+                convertView = getActivity().getLayoutInflater().inflate(R.layout.cards, parent, false);
+            }
+//
+//            TextView textViewCard = (TextView) convertView.findViewById(R.id.textViewCard);
+//            textViewCard.setText(foodEntries.get(position).getName());
+
+            image = (NetworkImageView) convertView.findViewById(R.id.textViewCard);
+            image.setImageUrl(item.getImageURL(), AppController.getInstance().getImageLoader());
+
+            TextView nameAndPrice = (TextView) convertView.findViewById(R.id.nameResturaunt);
+            nameAndPrice.setText("" + item.getName() + " " + item.getPrice());
+            Log.d("TEST 222222222222222222","IS THIS METHOD BEING CALLED");
+
+
+
+            return convertView;
         }
     }
 }

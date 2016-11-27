@@ -42,7 +42,7 @@ public class CustomAdapter extends ArrayAdapter<FoodItem> {
         image = (NetworkImageView) convertview.findViewById(R.id.thumbnail);
         image.setImageUrl(item.getImageURL(), AppController.getInstance().getImageLoader());
 
-        TextView nameAndPrice = (TextView) convertview.findViewById(R.id.nameAndPrice);
+        TextView nameAndPrice = (TextView) convertview.findViewById(R.id.nameResturaunt);
         nameAndPrice.setText("" + item.getName() + " " + item.getPrice());
 
 
