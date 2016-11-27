@@ -139,14 +139,15 @@ public class AdvancedSearchActivity extends AppCompatActivity{
         ArrayAdapter<CharSequence> radiusAdapter = ArrayAdapter.createFromResource(this,
                 R.array.radiusArray , android.R.layout.simple_spinner_item);
         radius.setAdapter(radiusAdapter);
+        radius.setSelection(1);
         radius.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String text = radius.getSelectedItem().toString();
                 //1609--1, 8046--5, 16093--10, 24140--15, 32187--20
-                if(text.equals("10 Miles (Default)")){
+                if(text.equals("10 Miles")){
                     returnIntent.putExtra("radius","16093");
-                } else if(text.equals("5 Miles")){
+                } else if(text.equals("5 Miles (Default)")){
                     returnIntent.putExtra("radius","8046");
                 } else if(text.equals("2 Miles")){
                     returnIntent.putExtra("radius","3218");

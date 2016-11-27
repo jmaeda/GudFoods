@@ -57,7 +57,6 @@ public class BrowseFragment extends Fragment  {
     ListView listView;
     String token;
     String username;
-    String rating;
     double latitude;
     double longitude;
     private View rootView;
@@ -86,6 +85,7 @@ public class BrowseFragment extends Fragment  {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
+                pDialog.dismiss();
             }
 
             @Override
@@ -114,6 +114,8 @@ public class BrowseFragment extends Fragment  {
                         }
                     });
                 }
+                yelpService.setRating("0");
+                pDialog.dismiss();
                 pDialog.dismiss();
             }
         };
@@ -196,11 +198,12 @@ public class BrowseFragment extends Fragment  {
                 flag = true;
             }
 
-            rating = (String) data.getExtras().get("rating");
+            String rating = (String) data.getExtras().get("rating");
             String price = (String) data.getExtras().get("price");
             String radius = (String) data.getExtras().get("radius");
 
             pDialog.show();
+            yelpService.setRating(rating);
             yelpService.advancedSearch(longitude, latitude, flag, location, price, radius, token, findRestaurantsCallback);
         }
     }
