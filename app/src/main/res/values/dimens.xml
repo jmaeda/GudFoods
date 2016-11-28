@@ -8,8 +8,8 @@
     <dimen name="genre">13dip</dimen>
     <dimen name="year">12dip</dimen>
 
-    <dimen name="advanced_search_text">17sp</dimen>
-    <dimen name="advanced_search_title">21sp</dimen>
+    <dimen name="advanced_search_text">19sp</dimen>
+    <dimen name="advanced_search_title">22sp</dimen>
 
     <dimen name="activity_intra_group_separation">10dp</dimen>
     <dimen name="activity_inter_group_separation">30dp</dimen>

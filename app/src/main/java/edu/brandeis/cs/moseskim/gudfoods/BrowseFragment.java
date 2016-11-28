@@ -48,6 +48,8 @@ import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManager;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerTaskResult;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerType;
 import edu.brandeis.cs.moseskim.gudfoods.aws.FoodItem_Dynamo;
+
+import edu.brandeis.cs.moseskim.gudfoods.aws.TemporaryPreferences;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -59,6 +61,7 @@ public class BrowseFragment extends Fragment  {
     private Button settings;
     private ArrayList<String> idList = new ArrayList<String>();
     private ArrayList<FoodItem> entries = new ArrayList<FoodItem>();
+    private ArrayList<FoodItem> entriesforUI = new ArrayList<FoodItem>();
     private ListView listView;
     private String token;
     private String username;
@@ -70,6 +73,8 @@ public class BrowseFragment extends Fragment  {
     private YelpService yelpService;
     private AsyncTask getYelpToken;
     private ProgressDialog pDialog;
+    private TemporaryPreferences temp;
+
     private static final int MY_PERMISSION_ACCESS_COURSE_LOCATION = 123;
     private MyLocationListener loc;
     private LocationManager locManager;
@@ -99,6 +104,7 @@ public class BrowseFragment extends Fragment  {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
+                pDialog.dismiss();
             }
 
             @Override
@@ -112,6 +118,7 @@ public class BrowseFragment extends Fragment  {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
+                pDialog.dismiss();
             }
 
             @Override
@@ -122,11 +129,14 @@ public class BrowseFragment extends Fragment  {
                         @Override
                         public void run() {
                             Log.d("uiEntries", "#" + entries.size());
-                            CustomAdapter adapter = new CustomAdapter(getActivity(), entries);
+                            entriesforUI = entries;
+                            CustomAdapter adapter = new CustomAdapter(getActivity(), entriesforUI);
                             listView.setAdapter(adapter);
                         }
                     });
                 }
+                yelpService.setRating("0");
+                pDialog.dismiss();
                 pDialog.dismiss();
             }
         };
@@ -228,11 +238,12 @@ public class BrowseFragment extends Fragment  {
                 flag = true;
             }
 
-            rating = (String) data.getExtras().get("rating");
+            String rating = (String) data.getExtras().get("rating");
             String price = (String) data.getExtras().get("price");
             String radius = (String) data.getExtras().get("radius");
 
             pDialog.show();
+            yelpService.setRating(rating);
             yelpService.advancedSearch(longitude, latitude, flag, location, price, radius, token, findRestaurantsCallback);
         }
     }
