@@ -18,28 +18,17 @@ package edu.brandeis.cs.moseskim.gudfoods.aws;
 import android.util.Log;
 
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedQueryList;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedScanList;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
-import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
-import com.amazonaws.services.dynamodbv2.model.DeleteTableRequest;
 import com.amazonaws.services.dynamodbv2.model.DescribeTableRequest;
 import com.amazonaws.services.dynamodbv2.model.DescribeTableResult;
-import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
-import com.amazonaws.services.dynamodbv2.model.KeyType;
-import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
-import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import edu.brandeis.cs.moseskim.gudfoods.BrowseFragment;
 import edu.brandeis.cs.moseskim.gudfoods.Constants;
@@ -127,7 +116,7 @@ public class DynamoDBManager {
         mapper.save(userSwipe);
     }
 
-    public static void listUserSwipeRights(String username) {
+    public static List<UserSwipe_Dynamo> listUserSwipeRights(String username) {
         AmazonDynamoDBClient ddb = BrowseFragment.clientManager.ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
         Log.d("LIST_USER_SWIPE_RIGHTS", username + "");
@@ -139,12 +128,25 @@ public class DynamoDBManager {
 
 
         PaginatedQueryList<UserSwipe_Dynamo> resultsList = mapper.query(UserSwipe_Dynamo.class, query);
-        String testing = "";
-        for (UserSwipe_Dynamo u : resultsList) {
-            testing += u.getFoodImageURL() + "\n";
-        }
-        Log.d("TAG USERS SWIPES", testing);
+        Log.d("TAG USERS SWIPES", "Done");
+        return resultsList;
+    }
 
+    public static List<FoodItem_Dynamo> listFoodItems(List<UserSwipe_Dynamo> list) {
+        Log.d("TAG FOOD ITEMS", "ENTERED");
+        AmazonDynamoDBClient ddb = BrowseFragment.clientManager.ddb();
+        DynamoDBMapper mapper = new DynamoDBMapper(ddb);
+
+        List<FoodItem_Dynamo> foodList = new LinkedList<>();
+        FoodItem_Dynamo foodItem;
+        for (UserSwipe_Dynamo u : list) {
+            foodItem = mapper.load(FoodItem_Dynamo.class, u.getFoodImageURL());
+            Log.d("listFoodItems", foodItem.getImageURL() + " " + foodItem.getBusinessId());
+            foodList.add(foodItem);
+        }
+
+        Log.d("TAG FOOD ITEMS", foodList.size() + "");
+        return foodList;
     }
 
 

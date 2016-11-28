@@ -47,6 +47,7 @@ import edu.brandeis.cs.moseskim.gudfoods.aws.AmazonClientManager;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManager;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerTaskResult;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerType;
+import edu.brandeis.cs.moseskim.gudfoods.aws.FoodItem_Dynamo;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -72,7 +73,6 @@ public class BrowseFragment extends Fragment  {
     private static final int MY_PERMISSION_ACCESS_COURSE_LOCATION = 123;
     private MyLocationListener loc;
     private LocationManager locManager;
-    private DynamoDBManager dynamoDBHelper;
 
     private Callback entriesCallback;
     private Callback finalCallback;
@@ -200,6 +200,16 @@ public class BrowseFragment extends Fragment  {
                 fi = entries.get(position);
                 isSwipeRight = true;
                 new DynamoDBInsertUserSwipeTask().execute(DynamoDBManagerType.INSERT_USER_SWIPE);
+                FoodItem_Dynamo foodItemDynamo = new FoodItem_Dynamo();
+                foodItemDynamo.setImageURL(fi.getImageURL());
+                foodItemDynamo.setBusinessName(fi.getBusinessName());
+                foodItemDynamo.setBusinessId(fi.getBusinessId());
+                foodItemDynamo.setPrice(fi.getPrice());
+                foodItemDynamo.setRating(fi.getRating());
+//                foodItemDynamo.setSwipeRightCount(x);
+                foodItemDynamo.setLatitude(fi.getLatitude());
+                foodItemDynamo.setLongitude(fi.getLongitude());
+                ((MainActivity) BrowseFragment.this.getActivity()).addFoodItem(foodItemDynamo);
             }
         });
 

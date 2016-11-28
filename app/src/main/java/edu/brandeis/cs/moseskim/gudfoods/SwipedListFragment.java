@@ -4,6 +4,7 @@ package edu.brandeis.cs.moseskim.gudfoods;
  * Created by Jon on 11/15/2016.
  */
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,26 +14,40 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManager;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerTaskResult;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerType;
+import edu.brandeis.cs.moseskim.gudfoods.aws.FoodItem_Dynamo;
+import edu.brandeis.cs.moseskim.gudfoods.aws.UserSwipe_Dynamo;
 
 public class SwipedListFragment extends Fragment {
 
     private View rootView;
-    private ListView listView;
+    private static ListView listView;
     private String username;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.swiped_list_fragment, container, false);
-        listView = (ListView) rootView.findViewById(R.id.listView);
+        listView = (ListView) rootView.findViewById(R.id.listView2);
 
         username = getArguments().getString("username");
         new DynamoDBSwipedListTask().execute(DynamoDBManagerType.LIST_USERS_SWIPES);
 
 
         return rootView;
+    }
+
+    public static void addToList(Activity activity, FoodItem_Dynamo fi) {
+        final FoodItem_Dynamo foodItem_dynamo = fi;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ((SwipedCustomAdapter) listView.getAdapter()).addFoodItem(foodItem_dynamo);
+            }
+        });
     }
 
     public class DynamoDBSwipedListTask extends
@@ -49,7 +64,16 @@ public class SwipedListFragment extends Fragment {
 
             if (types[0] == DynamoDBManagerType.LIST_USERS_SWIPES) {
                 if (tableStatus.equalsIgnoreCase("ACTIVE")) {
-                    DynamoDBManager.listUserSwipeRights(username);
+                    List<UserSwipe_Dynamo> userSwipes = DynamoDBManager.listUserSwipeRights(username);
+                    final List<FoodItem_Dynamo> foodList = DynamoDBManager.listFoodItems(userSwipes);
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            SwipedCustomAdapter swipedCustomAdapter = new SwipedCustomAdapter(getContext(), foodList);
+                            listView.setAdapter(swipedCustomAdapter);
+                        }
+                    });
                 }
             } else if (types[0] == DynamoDBManagerType.REMOVE_USER_SWIPE) {
                 if (tableStatus.equalsIgnoreCase("ACTIVE")) {

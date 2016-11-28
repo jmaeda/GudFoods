@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
 
+import edu.brandeis.cs.moseskim.gudfoods.aws.FoodItem_Dynamo;
+
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
 
@@ -57,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         this.finishAffinity();
+    }
+
+    public void addFoodItem(FoodItem_Dynamo foodItemDynamo) {
+        SwipedListFragment.addToList(this, foodItemDynamo);
     }
 }
 
