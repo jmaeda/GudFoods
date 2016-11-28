@@ -43,6 +43,7 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.brandeis.cs.moseskim.gudfoods.aws.AWSService;
+import edu.brandeis.cs.moseskim.gudfoods.aws.TemporaryPreferences;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -54,6 +55,7 @@ public class BrowseFragment extends Fragment  {
     Button settings;
     ArrayList<String> idList = new ArrayList<String>();
     ArrayList<FoodItem> entries = new ArrayList<FoodItem>();
+    ArrayList<FoodItem> entriesforUI = new ArrayList<FoodItem>();
     ListView listView;
     String token;
     String username;
@@ -63,6 +65,7 @@ public class BrowseFragment extends Fragment  {
     YelpService yelpService;
     AsyncTask getYelpToken;
     ProgressDialog pDialog;
+    TemporaryPreferences temp;
     private static final int MY_PERMISSION_ACCESS_COURSE_LOCATION = 123;
     MyLocationListener loc;
     LocationManager locManager;
@@ -99,6 +102,7 @@ public class BrowseFragment extends Fragment  {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
+                pDialog.dismiss();
             }
 
             @Override
@@ -109,7 +113,8 @@ public class BrowseFragment extends Fragment  {
                         @Override
                         public void run() {
                             Log.d("uiEntries", "#" + entries.size());
-                            CustomAdapter adapter = new CustomAdapter(getActivity(), entries);
+                            entriesforUI = entries;
+                            CustomAdapter adapter = new CustomAdapter(getActivity(), entriesforUI);
                             listView.setAdapter(adapter);
                         }
                     });

@@ -44,7 +44,7 @@ public class YelpService {
 
         OkHttpClient client = new OkHttpClient();
 
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(Constants.YELP_BASE_URL_V3 + "?term=food").newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(Constants.YELP_BASE_URL_V3).newBuilder();
         String lat = "" + latitude;
         String lon = "" + longitude;
         urlBuilder.addQueryParameter(Constants.YELP_LATITUDE_PARAMETER, lat);
@@ -67,7 +67,7 @@ public class YelpService {
 
         OkHttpClient client = new OkHttpClient();
 
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(Constants.YELP_BASE_URL_V3 + "?term=food").newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(Constants.YELP_BASE_URL_V3).newBuilder();
 
         if(flag == true){
             String lat = "" + latitude;
@@ -82,6 +82,8 @@ public class YelpService {
         urlBuilder.addQueryParameter(Constants.YELP_RADIUS_PARAMETER, radius);
         urlBuilder.addQueryParameter(Constants.YELP_LIMIT_PARAMETER, "30");
         String url = urlBuilder.build().toString();
+
+        Log.d("url", url);
 
         Request request= new Request.Builder()
                 .url(url)
