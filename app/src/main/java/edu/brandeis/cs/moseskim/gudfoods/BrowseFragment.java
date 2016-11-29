@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,7 +84,7 @@ public class BrowseFragment extends Fragment{
 
 
 
-
+    private ImageButton moreInfo;
     private Button mButtonLeft, mButtonRight;
     private FloatingActionButton mFab;
     private SwipeStack mSwipeStack;
@@ -100,6 +102,10 @@ public class BrowseFragment extends Fragment{
         advanced = (Button) rootView.findViewById(R.id.advanced_search);
         settings = (Button) rootView.findViewById(R.id.signout);
         yelpService = new YelpService();
+
+        moreInfo = (ImageButton) rootView.findViewById(R.id.info_button);
+
+
 
 
 
@@ -138,6 +144,18 @@ public class BrowseFragment extends Fragment{
             @Override
             public void onStackEmpty() {
                 Toast.makeText(getContext(), R.string.stack_empty, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        moreInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int currentPosition = mSwipeStack.getCurrentPosition();
+                FoodItem currentItem = mAdapter.getItem(currentPosition);
+                String businessID = currentItem.getId();
+                String fullUrl = "https://www.yelp.com/biz/" + businessID;
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(fullUrl));
+                startActivity(i);
             }
         });
 
@@ -310,6 +328,8 @@ public class BrowseFragment extends Fragment{
 
 
 
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
@@ -439,48 +459,7 @@ public class BrowseFragment extends Fragment{
         }
     }
 
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        switch (item.getItemId()) {
-//            case R.id.menuReset:
-//                mSwipeStack.resetStack();
-//                Snackbar.make(mFab, R.string.stack_reset, Snackbar.LENGTH_SHORT).show();
-//                return true;
-//            case R.id.menuGitHub:
-//                Intent browserIntent = new Intent(
-//                        Intent.ACTION_VIEW, Uri.parse("https://github.com/flschweiger/SwipeStack"));
-//                startActivity(browserIntent);
-//                return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
-//    @Override
-//    public void onViewSwipedToRight(int position) {
-//        FoodItem swipedElement = mAdapter.getItem(position);
-//        Toast.makeText(getContext(), getString(R.string.view_swiped_right, swipedElement.getName()),
-//                Toast.LENGTH_SHORT).show();
-//    }
-//
-//    @Override
-//    public void onViewSwipedToLeft(int position) {
-//        Log.d("TEST33333333333", "TESTING THE ONVIEWSWIPEDTOLEFT PLEASE WORK");
-//        FoodItem swipedElement = mAdapter.getItem(position);
-//        Toast.makeText(getContext(), getString(R.string.view_swiped_left, swipedElement.getName()),
-//                Toast.LENGTH_SHORT).show();
-//    }
-//    @Override
-//    public void onStackEmpty() {
-//        Toast.makeText(getContext(), R.string.stack_empty, Toast.LENGTH_SHORT).show();
-//    }
 
     public class SwipeStackAdapter extends ArrayAdapter<FoodItem> {
 
@@ -515,9 +494,7 @@ public class BrowseFragment extends Fragment{
             if (convertView == null) {
                 convertView = getActivity().getLayoutInflater().inflate(R.layout.cards, parent, false);
             }
-//
-//            TextView textViewCard = (TextView) convertView.findViewById(R.id.textViewCard);
-//            textViewCard.setText(foodEntries.get(position).getName());
+
 
             image = (NetworkImageView) convertView.findViewById(R.id.textViewCard);
             image.setImageUrl(item.getImageURL(), AppController.getInstance().getImageLoader());

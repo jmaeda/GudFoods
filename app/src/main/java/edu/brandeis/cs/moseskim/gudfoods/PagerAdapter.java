@@ -24,11 +24,11 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
 
         switch (position) {
-            case 0:
+            case 1:
                 BrowseFragment tab1 = new BrowseFragment();
                 tab1.setArguments(usernameBundle);
                 return tab1;
-            case 1:
+            case 0:
                 SwipedListFragment tab2 = new SwipedListFragment();
                 tab2.setArguments(usernameBundle);
                 return tab2;

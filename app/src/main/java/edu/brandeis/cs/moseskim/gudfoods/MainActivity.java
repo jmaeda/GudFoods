@@ -1,10 +1,10 @@
 package edu.brandeis.cs.moseskim.gudfoods;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -53,6 +53,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+//    public void changeImageView(View view) {
+//        view.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                view.setBackgroundColor(R.drawable.filename);
+//            }
+//        });
+
+//
+//    }
 
     @Override
     public void onBackPressed() {
