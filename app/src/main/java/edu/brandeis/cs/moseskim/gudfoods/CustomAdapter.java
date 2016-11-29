@@ -2,7 +2,6 @@ package edu.brandeis.cs.moseskim.gudfoods;
 
 
 import android.content.Context;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,9 +40,8 @@ public class CustomAdapter extends ArrayAdapter<FoodItem> {
 
         image = (NetworkImageView) convertview.findViewById(R.id.thumbnail);
         image.setImageUrl(item.getImageURL(), AppController.getInstance().getImageLoader());
-
-        TextView nameAndPrice = (TextView) convertview.findViewById(R.id.nameResturaunt);
-        nameAndPrice.setText("" + item.getName() + " " + item.getPrice());
+        TextView nameAndPrice = (TextView) convertview.findViewById(R.id.nameAndPrice);
+        nameAndPrice.setText("" + item.getBusinessName() + " " + item.getPrice());
 
 
         return convertview;

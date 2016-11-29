@@ -43,8 +43,8 @@
     <string name="four_star">4 Stars</string>
     <string name="five_star">5 Stars</string>
 
-    <string name="ten_mile">10 Miles (Default)</string>
-    <string name="five_mile">5 Miles</string>
+    <string name="ten_mile">10 Miles</string>
+    <string name="five_mile">5 Miles (Default)</string>
     <string name="two_mile">2 Miles</string>
     <string name="one_mile">1 Mile</string>
 

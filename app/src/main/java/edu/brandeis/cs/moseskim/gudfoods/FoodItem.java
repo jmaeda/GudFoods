@@ -12,20 +12,20 @@ import java.net.URL;
  */
 public class FoodItem {
 
-    String id;
-    String name;
-    String imageURL;
-    String price;
-    Double latitude;
-    Double longitude;
-    Double rating;
-    Boolean open;
+    private String businessId;
+    private String businessName;
+    private String imageURL;
+    private String price;
+    private Double latitude;
+    private Double longitude;
+    private Double rating;
+    private Boolean open;
 
     public FoodItem(String name, String imageURL, String price, String id, Double rating, String open, Double longitude, Double latitude){
-        this.name = name;
+        this.businessName = name;
         this.imageURL = imageURL;
         this.price = price;
-        this.id = id;
+        this.businessId = id;
         this.rating = rating;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -54,11 +54,11 @@ public class FoodItem {
         }
     }
 
-    public String getId(){return this.id;}
+    public String getBusinessId(){return this.businessId;}
     public String getImageURL(){
         return this.imageURL;
     }
-    public String getName(){return this.name;}
+    public String getBusinessName(){return this.businessName;}
     public String getPrice() {return this.price;}
     public Double getRating() {return this.rating;}
     public Double getLatitude() {return this.latitude;}

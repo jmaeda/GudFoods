@@ -23,6 +23,21 @@ import okhttp3.Response;
 
 public class YelpService {
 
+    private double user_prefered_rating;
+
+
+    public YelpService(){
+        user_prefered_rating = 0;
+    }
+
+    public void setRating(String user_prefered_rating){
+        this.user_prefered_rating = Double.parseDouble(user_prefered_rating);
+    }
+
+    public double getRating(){
+        return user_prefered_rating;
+    }
+
     public static void findRestaurants(Double latitude, Double longitude, String token, Callback callback) {
         Log.d("Entering", "YelpService.findRestaurants");
         Log.d("Token", "Bearer " + token);
@@ -34,7 +49,7 @@ public class YelpService {
         String lon = "" + longitude;
         urlBuilder.addQueryParameter(Constants.YELP_LATITUDE_PARAMETER, lat);
         urlBuilder.addQueryParameter(Constants.YELP_LONGITUDE_PARAMETER, lon);
-        urlBuilder.addQueryParameter(Constants.YELP_RADIUS_PARAMETER, "16093");
+        urlBuilder.addQueryParameter(Constants.YELP_RADIUS_PARAMETER, "8046");
         urlBuilder.addQueryParameter(Constants.YELP_LIMIT_PARAMETER, "30");
         String url = urlBuilder.build().toString();
 
@@ -67,6 +82,8 @@ public class YelpService {
         urlBuilder.addQueryParameter(Constants.YELP_RADIUS_PARAMETER, radius);
         urlBuilder.addQueryParameter(Constants.YELP_LIMIT_PARAMETER, "30");
         String url = urlBuilder.build().toString();
+
+        Log.d("url", url);
 
         Request request= new Request.Builder()
                 .url(url)
@@ -109,10 +126,18 @@ public class YelpService {
                 Double longitude = coordinates.getDouble("longitude");
                 Double latitude = coordinates.getDouble("latitude");
                 for(int i = 0; i <pictures.length(); i++){
-                    FoodItem item = new FoodItem(name, pictures.get(i).toString(), price, id, rating, open, longitude, latitude);
-                    fooditems.add(item);
-                    if(i>2){
-                        break;
+                    if(user_prefered_rating>0 && rating >=user_prefered_rating) {
+                        FoodItem item = new FoodItem(name, pictures.get(i).toString(), price, id, rating, open, longitude, latitude);
+                        fooditems.add(item);
+                        if (i > 2) {
+                            break;
+                        }
+                    } else if (user_prefered_rating == 0) {
+                        FoodItem item = new FoodItem(name, pictures.get(i).toString(), price, id, rating, open, longitude, latitude);
+                        fooditems.add(item);
+                        if (i > 2) {
+                            break;
+                        }
                     }
                 }
             }

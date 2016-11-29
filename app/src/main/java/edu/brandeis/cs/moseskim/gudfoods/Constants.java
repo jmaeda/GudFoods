@@ -29,4 +29,10 @@ public class Constants {
 
     public static final String AWS_POOL_ID = BuildConfig.AWS_POOL_ID;
     public static final String AWS_USER_ID = BuildConfig.AWS_USER_ID;
+    public static final String FOOD_ITEM_TABLE_NAME = "FoodItem";
+    public static final String USER_SWIPE_TABLE_NAME = "UserSwipe";
+
+    public static final String IDENTITY_POOL_ID = "us-east-1:ee2fb8d9-eb6d-4713-8e8a-85785b15adc4";
+    public static final String TEST_TABLE_NAME = "FoodItem";
+
 }

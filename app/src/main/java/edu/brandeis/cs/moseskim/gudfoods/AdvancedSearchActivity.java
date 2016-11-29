@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import edu.brandeis.cs.moseskim.gudfoods.aws.TemporaryPreferences;
+
 /**
  * Created by Jon on 11/24/2016.
  */
@@ -51,6 +53,7 @@ public class AdvancedSearchActivity extends AppCompatActivity{
         radius = (Spinner) findViewById(R.id.radius_spinner);
 
         //setup location
+        location.setText(TemporaryPreferences.location);
         location.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -65,6 +68,8 @@ public class AdvancedSearchActivity extends AppCompatActivity{
                 } else {
                     returnIntent.putExtra("location", loc);
                 }
+
+                TemporaryPreferences.location = loc;
             }
 
             @Override
@@ -76,6 +81,7 @@ public class AdvancedSearchActivity extends AppCompatActivity{
         ArrayAdapter<CharSequence> priceAdapter = ArrayAdapter.createFromResource(this,
                 R.array.priceArray , android.R.layout.simple_spinner_item);
         price.setAdapter(priceAdapter);
+        price.setSelection(TemporaryPreferences.priceInt);
         price.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -94,6 +100,7 @@ public class AdvancedSearchActivity extends AppCompatActivity{
         ArrayAdapter<CharSequence> minPriceAdapter = ArrayAdapter.createFromResource(this,
                 R.array.minPriceArray , android.R.layout.simple_spinner_item);
         minPrice.setAdapter(minPriceAdapter);
+        minPrice.setSelection(TemporaryPreferences.minPriceInt);
         minPrice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -112,19 +119,26 @@ public class AdvancedSearchActivity extends AppCompatActivity{
         ArrayAdapter<CharSequence> ratingAdapter = ArrayAdapter.createFromResource(this,
                 R.array.ratingArray , android.R.layout.simple_spinner_item);
         rating.setAdapter(ratingAdapter);
+        rating.setSelection(TemporaryPreferences.ratingInt);
         rating.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String text = rating.getSelectedItem().toString();
                 if(text.equals("1 Star (Default)")){
+                    Log.d("rating","1 star default");
+                    TemporaryPreferences.ratingInt = 0;
                     returnIntent.putExtra("rating","1");
                 } else if(text.equals("2 Stars")){
+                    TemporaryPreferences.ratingInt = 1;
                     returnIntent.putExtra("rating","2");
                 } else if(text.equals("3 Stars")){
+                    TemporaryPreferences.ratingInt = 2;
                     returnIntent.putExtra("rating","3");
                 } else if(text.equals("4 Stars")){
+                    TemporaryPreferences.ratingInt = 3;
                     returnIntent.putExtra("rating","4");
                 } else if(text.equals("5 Stars")){
+                    TemporaryPreferences.ratingInt = 4;
                     returnIntent.putExtra("rating","5");
                 }
             }
@@ -139,18 +153,23 @@ public class AdvancedSearchActivity extends AppCompatActivity{
         ArrayAdapter<CharSequence> radiusAdapter = ArrayAdapter.createFromResource(this,
                 R.array.radiusArray , android.R.layout.simple_spinner_item);
         radius.setAdapter(radiusAdapter);
+        radius.setSelection(TemporaryPreferences.radiusInt);
         radius.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String text = radius.getSelectedItem().toString();
                 //1609--1, 8046--5, 16093--10, 24140--15, 32187--20
-                if(text.equals("10 Miles (Default)")){
+                if(text.equals("10 Miles")){
+                    TemporaryPreferences.radiusInt = 0;
                     returnIntent.putExtra("radius","16093");
-                } else if(text.equals("5 Miles")){
+                } else if(text.equals("5 Miles (Default)")){
+                    TemporaryPreferences.radiusInt = 1;
                     returnIntent.putExtra("radius","8046");
                 } else if(text.equals("2 Miles")){
+                    TemporaryPreferences.radiusInt = 2;
                     returnIntent.putExtra("radius","3218");
                 } else if(text.equals("1 Mile")){
+                    TemporaryPreferences.radiusInt = 3;
                     returnIntent.putExtra("radius","1609");
                 }
             }
@@ -173,23 +192,31 @@ public class AdvancedSearchActivity extends AppCompatActivity{
     public void setPriceExtra(String max, String min){
         int start;
         int end;
-        if(max.equals("$$$$ (Default")){
+        if(max.equals("$$$$ (Default)")){
+            TemporaryPreferences.priceInt = 0;
             end = 4;
         } else if (max.equals("$$$")){
+            TemporaryPreferences.priceInt = 1;
             end = 3;
         } else if (max.equals("$$")) {
+            TemporaryPreferences.priceInt = 2;
             end = 2;
         } else {
+            TemporaryPreferences.priceInt = 3;
             end = 1;
         }
 
-        if(min.equals("$ (Default")){
+        if(min.equals("$ (Default)")){
+            TemporaryPreferences.minPriceInt = 0;
             start = 1;
         } else if (min.equals("$$")){
+            TemporaryPreferences.minPriceInt = 1;
             start = 2;
         } else if (min.equals("$$$")){
+            TemporaryPreferences.minPriceInt = 2;
             start = 3;
         } else {
+            TemporaryPreferences.minPriceInt = 3;
             start = 4;
         }
 
