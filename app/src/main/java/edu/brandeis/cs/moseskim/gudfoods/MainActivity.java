@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         clientManager = new AmazonClientManager(this);
 
+
         username = getIntent().getExtras().getString("name");
 
         //setup toolbar
@@ -32,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
         //add tabs
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.browse_tab));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.swiped_list_tab));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.browse_tab));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.trending_tab));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 

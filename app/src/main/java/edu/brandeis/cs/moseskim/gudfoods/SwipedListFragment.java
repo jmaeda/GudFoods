@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import edu.brandeis.cs.moseskim.gudfoods.aws.AmazonClientManager;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManager;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerTaskResult;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerType;
@@ -27,6 +28,8 @@ public class SwipedListFragment extends Fragment {
     private View rootView;
     private static ListView listView;
     private String username;
+    public static AmazonClientManager clientManager = null;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,6 +49,8 @@ public class SwipedListFragment extends Fragment {
             @Override
             public void run() {
                 ((SwipedCustomAdapter) listView.getAdapter()).addFoodItem(foodItem_dynamo);
+                ((SwipedCustomAdapter) listView.getAdapter()).notifyDataSetChanged();
+
             }
         });
     }
@@ -70,8 +75,10 @@ public class SwipedListFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            SwipedCustomAdapter swipedCustomAdapter = new SwipedCustomAdapter(getContext(), foodList);
-                            listView.setAdapter(swipedCustomAdapter);
+                            if (foodList != null) {
+                                SwipedCustomAdapter swipedCustomAdapter = new SwipedCustomAdapter(getContext(), foodList);
+                                listView.setAdapter(swipedCustomAdapter);
+                            }
                         }
                     });
                 }

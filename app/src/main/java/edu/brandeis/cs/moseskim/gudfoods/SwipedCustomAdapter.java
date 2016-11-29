@@ -44,7 +44,6 @@ public class SwipedCustomAdapter extends ArrayAdapter<FoodItem_Dynamo> {
 
     public void addFoodItem(FoodItem_Dynamo foodItemDynamo) {
         entries.add(foodItemDynamo);
-        notifyDataSetChanged();
     }
 
 }

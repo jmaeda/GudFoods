@@ -52,6 +52,7 @@ import edu.brandeis.cs.moseskim.gudfoods.aws.AWSService;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManager;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerTaskResult;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerType;
+import edu.brandeis.cs.moseskim.gudfoods.aws.FoodItem_Dynamo;
 import edu.brandeis.cs.moseskim.gudfoods.aws.TemporaryPreferences;
 import link.fls.swipestack.SwipeStack;
 import okhttp3.Call;
@@ -92,16 +93,11 @@ public class BrowseFragment extends Fragment{
     private FoodItem fi;
     private boolean isSwipeRight;
 
-
-
     private ImageButton moreInfo;
     private Button mButtonLeft, mButtonRight;
     private FloatingActionButton mFab;
     private SwipeStack mSwipeStack;
     private SwipeStackAdapter mAdapter;
-
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -136,6 +132,12 @@ public class BrowseFragment extends Fragment{
             @Override
             public void onViewSwipedToLeft(int position) {
                 FoodItem swipedElement = mAdapter.getItem(position);
+
+                isSwipeRight = false;
+                fi = swipedElement;
+                new DynamoDBInsertUserSwipeTask().execute(DynamoDBManagerType.INSERT_USER_SWIPE);
+
+
                 Toast.makeText(getContext(), getString(R.string.view_swiped_left, swipedElement.getBusinessName()),
                         Toast.LENGTH_SHORT).show();
             }
@@ -143,6 +145,13 @@ public class BrowseFragment extends Fragment{
             @Override
             public void onViewSwipedToRight(int position) {
                 FoodItem swipedElement = mAdapter.getItem(position);
+
+                isSwipeRight = true;
+                new DynamoDBInsertUserSwipeTask().execute(DynamoDBManagerType.INSERT_USER_SWIPE);
+                fi = swipedElement;
+                FoodItem_Dynamo foodItemDynamo = foodItemToDynamo(swipedElement);
+                ((MainActivity) BrowseFragment.this.getActivity()).addFoodItem(foodItemDynamo);
+
                 Toast.makeText(getContext(), getString(R.string.view_swiped_right, swipedElement.getBusinessName()),
                         Toast.LENGTH_SHORT).show();
             }
@@ -279,26 +288,6 @@ public class BrowseFragment extends Fragment{
             }
         });
 
-
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                fi = entries.get(position);
-//                isSwipeRight = true;
-//                new DynamoDBInsertUserSwipeTask().execute(DynamoDBManagerType.INSERT_USER_SWIPE);
-//                FoodItem_Dynamo foodItemDynamo = new FoodItem_Dynamo();
-//                foodItemDynamo.setImageURL(fi.getImageURL());
-//                foodItemDynamo.setBusinessName(fi.getBusinessName());
-//                foodItemDynamo.setBusinessId(fi.getBusinessId());
-//                foodItemDynamo.setPrice(fi.getPrice());
-//                foodItemDynamo.setRating(fi.getRating());
-////                foodItemDynamo.setSwipeRightCount(x);
-//                foodItemDynamo.setLatitude(fi.getLatitude());
-//                foodItemDynamo.setLongitude(fi.getLongitude());
-//                ((MainActivity) BrowseFragment.this.getActivity()).addFoodItem(foodItemDynamo);
-//            }
-//        });
-
         return rootView;
     }
 
@@ -358,7 +347,17 @@ public class BrowseFragment extends Fragment{
         }
     }
 
-
+    private FoodItem_Dynamo foodItemToDynamo(FoodItem fi) {
+        FoodItem_Dynamo foodItemDynamo = new FoodItem_Dynamo();
+        foodItemDynamo.setImageURL(fi.getImageURL());
+        foodItemDynamo.setBusinessName(fi.getBusinessName());
+        foodItemDynamo.setBusinessId(fi.getBusinessId());
+        foodItemDynamo.setPrice(fi.getPrice());
+        foodItemDynamo.setRating(fi.getRating());
+        foodItemDynamo.setLatitude(fi.getLatitude());
+        foodItemDynamo.setLongitude(fi.getLongitude());
+        return foodItemDynamo;
+    }
 
 
 
