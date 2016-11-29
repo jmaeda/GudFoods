@@ -30,9 +30,9 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.brandeis.cs.moseskim.gudfoods.BrowseFragment;
 import edu.brandeis.cs.moseskim.gudfoods.Constants;
 import edu.brandeis.cs.moseskim.gudfoods.FoodItem;
+import edu.brandeis.cs.moseskim.gudfoods.MainActivity;
 
 public class DynamoDBManager {
 
@@ -44,7 +44,7 @@ public class DynamoDBManager {
     public static String getTestTableStatus() {
 
         try {
-            AmazonDynamoDBClient ddb = BrowseFragment.clientManager
+            AmazonDynamoDBClient ddb = MainActivity.clientManager
                     .ddb();
 
             DescribeTableRequest request = new DescribeTableRequest()
@@ -56,7 +56,7 @@ public class DynamoDBManager {
 
         } catch (ResourceNotFoundException e) {
         } catch (AmazonServiceException ex) {
-            BrowseFragment.clientManager
+            MainActivity.clientManager
                     .wipeCredentialsOnAuthError(ex);
         }
 
@@ -69,7 +69,7 @@ public class DynamoDBManager {
      * @param isSwipeRight
      */
     public static void incrementFoodItem(FoodItem fi, boolean isSwipeRight) {
-        AmazonDynamoDBClient ddb = BrowseFragment.clientManager
+        AmazonDynamoDBClient ddb = MainActivity.clientManager
                 .ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
 
@@ -102,7 +102,7 @@ public class DynamoDBManager {
     }
 
     public static void insertUserSwipe(String username, String foodURL, boolean isSwipeRight) {
-        AmazonDynamoDBClient ddb = BrowseFragment.clientManager.ddb();
+        AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
         Log.d(TAG, "INSERT USER SWIPE " + username);
 
@@ -117,7 +117,7 @@ public class DynamoDBManager {
     }
 
     public static List<UserSwipe_Dynamo> listUserSwipeRights(String username) {
-        AmazonDynamoDBClient ddb = BrowseFragment.clientManager.ddb();
+        AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
         Log.d("LIST_USER_SWIPE_RIGHTS", username + "");
 
@@ -134,7 +134,7 @@ public class DynamoDBManager {
 
     public static List<FoodItem_Dynamo> listFoodItems(List<UserSwipe_Dynamo> list) {
         Log.d("TAG FOOD ITEMS", "ENTERED");
-        AmazonDynamoDBClient ddb = BrowseFragment.clientManager.ddb();
+        AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
 
         List<FoodItem_Dynamo> foodList = new LinkedList<>();

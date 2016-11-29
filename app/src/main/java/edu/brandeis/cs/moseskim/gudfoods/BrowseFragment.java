@@ -49,7 +49,6 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.brandeis.cs.moseskim.gudfoods.aws.AWSService;
-import edu.brandeis.cs.moseskim.gudfoods.aws.AmazonClientManager;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManager;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerTaskResult;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerType;
@@ -90,7 +89,6 @@ public class BrowseFragment extends Fragment{
     private Callback finalCallback;
     private Callback findRestaurantsCallback;
 
-    public static AmazonClientManager clientManager = null;
     private FoodItem fi;
     private boolean isSwipeRight;
 
@@ -170,7 +168,6 @@ public class BrowseFragment extends Fragment{
 
         username = getArguments().getString("username");
 
-        clientManager = new AmazonClientManager(this.getActivity());
 
         //initialize entriesCallback, to be called after each restaurant api call
         entriesCallback = new Callback() {
@@ -259,6 +256,7 @@ public class BrowseFragment extends Fragment{
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mSwipeStack.invalidate();
                 pDialog.show();
                 findLocation();
                 yelpService.findRestaurants(latitude, longitude, token, findRestaurantsCallback);

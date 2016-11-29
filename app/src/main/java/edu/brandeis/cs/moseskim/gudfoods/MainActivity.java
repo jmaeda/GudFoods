@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import edu.brandeis.cs.moseskim.gudfoods.aws.AmazonClientManager;
 import edu.brandeis.cs.moseskim.gudfoods.aws.FoodItem_Dynamo;
 
 public class MainActivity extends AppCompatActivity {
@@ -13,11 +14,14 @@ public class MainActivity extends AppCompatActivity {
 
     String token;
     String username;
+    public static AmazonClientManager clientManager = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        clientManager = new AmazonClientManager(this);
 
         username = getIntent().getExtras().getString("name");
 
