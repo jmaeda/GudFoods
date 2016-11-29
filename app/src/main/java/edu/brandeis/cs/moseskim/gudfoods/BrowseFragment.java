@@ -54,6 +54,7 @@ import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerTaskResult;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerType;
 import edu.brandeis.cs.moseskim.gudfoods.aws.FoodItem_Dynamo;
 import edu.brandeis.cs.moseskim.gudfoods.aws.TemporaryPreferences;
+import link.fls.swipestack.SwipeHelper;
 import link.fls.swipestack.SwipeStack;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -66,6 +67,7 @@ public class BrowseFragment extends Fragment{
     private Button button;
     private Button advanced;
     private Button settings;
+    private boolean refreshed = false;
     private ArrayList<String> idList = new ArrayList<String>();
     private ArrayList<FoodItem> entries = new ArrayList<FoodItem>();
     private ArrayList<FoodItem> entriesforUI = new ArrayList<FoodItem>();
@@ -73,6 +75,7 @@ public class BrowseFragment extends Fragment{
     private String token;
     private String username;
     private String rating;
+    private int fakeSwipe;
 
     double latitude;
     double longitude;
@@ -93,6 +96,8 @@ public class BrowseFragment extends Fragment{
     private FoodItem fi;
     private boolean isSwipeRight;
 
+
+    private SwipeHelper swipeHelp;
     private ImageButton moreInfo;
     private Button mButtonLeft, mButtonRight;
     private FloatingActionButton mFab;
@@ -111,7 +116,8 @@ public class BrowseFragment extends Fragment{
 
         moreInfo = (ImageButton) rootView.findViewById(R.id.info_button);
 
-
+        fakeSwipe = 1;
+        swipeHelp = new SwipeHelper(mSwipeStack);
         mButtonLeft = (Button) rootView.findViewById(R.id.buttonSwipeLeft);
         mButtonLeft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,6 +129,7 @@ public class BrowseFragment extends Fragment{
         mButtonRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 mSwipeStack.swipeTopViewToRight();
             }
         });
@@ -140,6 +147,7 @@ public class BrowseFragment extends Fragment{
 
                 Toast.makeText(getContext(), getString(R.string.view_swiped_left, swipedElement.getBusinessName()),
                         Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -154,6 +162,7 @@ public class BrowseFragment extends Fragment{
 
                 Toast.makeText(getContext(), getString(R.string.view_swiped_right, swipedElement.getBusinessName()),
                         Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -213,6 +222,14 @@ public class BrowseFragment extends Fragment{
 
                             mAdapter = new SwipeStackAdapter(getActivity(), entriesforUI);
                             mSwipeStack.setAdapter(mAdapter);
+                            if(refreshed) {
+                                mSwipeStack.resetStack();
+                                refreshed = false;
+                            }
+
+
+
+
                         }
                     });
                 }
@@ -269,6 +286,8 @@ public class BrowseFragment extends Fragment{
                 pDialog.show();
                 findLocation();
                 yelpService.findRestaurants(latitude, longitude, token, findRestaurantsCallback);
+                refreshed = true;
+
             }
         });
         advanced.setOnClickListener(new View.OnClickListener() {
