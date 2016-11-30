@@ -36,6 +36,7 @@ public class SwipedListFragment extends Fragment {
         rootView = inflater.inflate(R.layout.swiped_list_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView2);
 
+
         username = getArguments().getString("username");
         new DynamoDBSwipedListTask().execute(DynamoDBManagerType.LIST_USERS_SWIPES);
 
