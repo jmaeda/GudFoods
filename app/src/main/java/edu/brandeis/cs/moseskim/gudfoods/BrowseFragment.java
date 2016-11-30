@@ -108,6 +108,7 @@ public class BrowseFragment extends Fragment{
         button = (Button) rootView.findViewById(R.id.browse);
         advanced = (Button) rootView.findViewById(R.id.advanced_search);
         yelpService = new YelpService();
+        new DynamoDBImageSwipeTask().execute(DynamoDBManagerType.LIST_USER_BUSINESS_INDEX);
 
         moreInfo = (ImageButton) rootView.findViewById(R.id.info_button);
         mButtonLeft = (Button) rootView.findViewById(R.id.buttonSwipeLeft);
@@ -134,7 +135,7 @@ public class BrowseFragment extends Fragment{
 
                 isSwipeRight = false;
                 fi = swipedElement;
-                new DynamoDBInsertUserSwipeTask().execute(DynamoDBManagerType.INSERT_USER_SWIPE);
+                new DynamoDBImageSwipeTask().execute(DynamoDBManagerType.INSERT_USER_SWIPE);
 
 
                 Toast.makeText(getContext(), getString(R.string.view_swiped_left, swipedElement.getBusinessName()),
@@ -147,7 +148,7 @@ public class BrowseFragment extends Fragment{
                 FoodItem swipedElement = mAdapter.getItem(position);
 
                 isSwipeRight = true;
-                new DynamoDBInsertUserSwipeTask().execute(DynamoDBManagerType.INSERT_USER_SWIPE);
+                new DynamoDBImageSwipeTask().execute(DynamoDBManagerType.INSERT_USER_SWIPE);
                 fi = swipedElement;
                 FoodItem_Dynamo foodItemDynamo = foodItemToDynamo(swipedElement);
                 ((MainActivity) BrowseFragment.this.getActivity()).addFoodItem(foodItemDynamo);
@@ -263,12 +264,12 @@ public class BrowseFragment extends Fragment{
         loc = new MyLocationListener();
         locManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         getYelpToken = new GetYelpToken().execute();
-        locManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+//        locManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
         pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Loading...");
         pDialog.setCanceledOnTouchOutside(false);
         pDialog.show();
-        getYelpToken = new GetYelpToken().execute();
+//        getYelpToken = new GetYelpToken().execute();
 
         //set method to get photos onclick
         button.setOnClickListener(new View.OnClickListener() {
@@ -546,7 +547,7 @@ public class BrowseFragment extends Fragment{
         }
     }
 
-    private class DynamoDBInsertUserSwipeTask extends
+    private class DynamoDBImageSwipeTask extends
             AsyncTask<DynamoDBManagerType, Void, DynamoDBManagerTaskResult> {
 
         protected DynamoDBManagerTaskResult doInBackground(
@@ -561,6 +562,13 @@ public class BrowseFragment extends Fragment{
                 if (tableStatus.equalsIgnoreCase("ACTIVE")) {
                     DynamoDBManager.incrementFoodItem(fi, isSwipeRight);
                     DynamoDBManager.insertUserSwipe(username, fi.getImageURL(), isSwipeRight);
+                    int x = DynamoDBManager.incrementImageIndex(username, fi.getBusinessId());
+                    Log.d("`1234567890-09876534", "" + x);
+                    yelpService.setImageIndex(fi.getBusinessId(), x);
+                }
+            } else if (types[0] == DynamoDBManagerType.LIST_USER_BUSINESS_INDEX) {
+                if (tableStatus.equalsIgnoreCase("ACTIVE")) {
+                    yelpService.setImageIndexMap(DynamoDBManager.getAllImageIndexes(username));
                 }
             }
 
@@ -570,7 +578,7 @@ public class BrowseFragment extends Fragment{
         protected void onPostExecute(DynamoDBManagerTaskResult result) {
             if (result.getTaskType() == DynamoDBManagerType.LIST_USERS_SWIPES
                     && result.getTableStatus().equalsIgnoreCase("ACTIVE")) {
-                new DynamoDBInsertUserSwipeTask().execute(DynamoDBManagerType.LIST_USERS_SWIPES);
+                new DynamoDBImageSwipeTask().execute(DynamoDBManagerType.LIST_USERS_SWIPES);
             } else if (!result.getTableStatus().equalsIgnoreCase("ACTIVE")) {
                 Toast.makeText(
                         BrowseFragment.this.getActivity(),
