@@ -17,6 +17,7 @@ package edu.brandeis.cs.moseskim.gudfoods.aws;
 
 import android.util.Log;
 
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
@@ -55,7 +56,14 @@ public class DynamoDBManager {
 
             DescribeTableRequest request = new DescribeTableRequest()
                     .withTableName(Constants.TEST_TABLE_NAME);
-            DescribeTableResult result = ddb.describeTable(request);
+            DescribeTableResult result = null;
+            while (result == null) {
+                try {
+                    result = ddb.describeTable(request);
+                } catch (AmazonClientException e) {
+                    Log.e(TAG, "HTTP request timeout");
+                }
+            }
 
             String status = result.getTable().getTableStatus();
             return status == null ? "" : status;
@@ -120,6 +128,55 @@ public class DynamoDBManager {
         userSwipe.setTimeAdded(new Date());
 
         mapper.save(userSwipe);
+    }
+
+    public static int incrementImageIndex(String username, String businessId) {
+        AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
+        DynamoDBMapper mapper = new DynamoDBMapper(ddb);
+        Log.d(TAG, "INCREMENT USER BUSINESS  " + username + " " +  businessId);
+
+        UserBusiness_Dynamo userBusinessDynamo = mapper.load(UserBusiness_Dynamo.class, username, businessId);
+
+        if (userBusinessDynamo == null) {
+            userBusinessDynamo = new UserBusiness_Dynamo();
+            userBusinessDynamo.setUser(username);
+            userBusinessDynamo.setBusinessId(businessId);
+            userBusinessDynamo.setImageIndex(1);
+        } else {
+            userBusinessDynamo.setImageIndex(userBusinessDynamo.getImageIndex() + 1);
+        }
+
+        mapper.save(userBusinessDynamo);
+        Log.d("TAG", "" + userBusinessDynamo.getImageIndex());
+        return userBusinessDynamo.getImageIndex();
+   }
+
+    public static int getImageIndex(String username, String businessId) {
+        AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
+        DynamoDBMapper mapper = new DynamoDBMapper(ddb);
+        Log.d(TAG, "INCREMENT USER BUSINESS  " + username + " " +  businessId);
+
+        UserBusiness_Dynamo userBusinessDynamo = mapper.load(UserBusiness_Dynamo.class, username, businessId);
+        if (userBusinessDynamo != null) {
+            return userBusinessDynamo.getImageIndex();
+        } else {
+            return 0;
+        }
+    }
+
+    public static List<UserBusiness_Dynamo> getAllImageIndexes(String username) {
+        AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
+        DynamoDBMapper mapper = new DynamoDBMapper(ddb);
+        Log.d(TAG, "Listing all USER BUSINESS  " + username );
+
+        DynamoDBQueryExpression<UserBusiness_Dynamo> query = new DynamoDBQueryExpression<>();
+        UserBusiness_Dynamo queryName = new UserBusiness_Dynamo();
+        queryName.setUser(username);
+        query.setHashKeyValues(queryName);
+
+
+        PaginatedQueryList<UserBusiness_Dynamo> resultsList = mapper.query(UserBusiness_Dynamo.class, query);
+        return resultsList;
     }
 
     public static List<UserSwipe_Dynamo> listUserSwipeRights(String username) {

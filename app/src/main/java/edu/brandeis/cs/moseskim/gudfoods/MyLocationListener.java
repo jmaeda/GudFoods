@@ -16,11 +16,11 @@ public class MyLocationListener implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         if (location!= null){
-            Log.e("Latitude :", "" + location.getLatitude());
-            Log.e("Longitude :", "" + location.getLongitude());
-
-
-            Log.v("please","work");
+//            Log.e("Latitude :", "" + location.getLatitude());
+//            Log.e("Longitude :", "" + location.getLongitude());
+//
+//
+//            Log.v("please","work");
             this.coordinates = location.getLatitude() + "," + location.getLongitude();
         }
     }

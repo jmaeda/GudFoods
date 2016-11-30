@@ -3,9 +3,7 @@ package edu.brandeis.cs.moseskim.gudfoods;
 /**
  * Created by moseskim on 10/11/16.
  */
-import android.os.AsyncTask;
 import android.util.Log;
-import android.util.Pair;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,7 +11,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import edu.brandeis.cs.moseskim.gudfoods.aws.UserBusiness_Dynamo;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -24,10 +26,11 @@ import okhttp3.Response;
 public class YelpService {
 
     private double user_prefered_rating;
-
+    private Map<String, Integer> imageIndexMap;
 
     public YelpService(){
         user_prefered_rating = 0;
+        imageIndexMap = new HashMap<>();
     }
 
     public void setRating(String user_prefered_rating){
@@ -36,6 +39,20 @@ public class YelpService {
 
     public double getRating(){
         return user_prefered_rating;
+    }
+
+    public int getImageIndex(String businessId) {
+        return imageIndexMap.get(businessId) != null ? imageIndexMap.get(businessId) : 0;
+    }
+
+    public void setImageIndex(String businessId, int imageIndex) {
+        imageIndexMap.put(businessId, imageIndex);
+    }
+
+    public void setImageIndexMap(List<UserBusiness_Dynamo> listOfUserBusinessDynamo) {
+        for (UserBusiness_Dynamo u : listOfUserBusinessDynamo) {
+            imageIndexMap.put(u.getBusinessId(), u.getImageIndex());
+        }
     }
 
     public static void findRestaurants(Double latitude, Double longitude, String token, Callback callback) {
@@ -125,17 +142,18 @@ public class YelpService {
                 JSONObject coordinates = yelpJSON.getJSONObject("coordinates");
                 Double longitude = coordinates.getDouble("longitude");
                 Double latitude = coordinates.getDouble("latitude");
-                for(int i = 0; i <pictures.length(); i++){
-                    if(user_prefered_rating>0 && rating >=user_prefered_rating) {
+//                Log.d("YELP SERVICE", "" + getImageIndex(id) + " " + id);
+                for(int i = getImageIndex(id); i < pictures.length(); i++){
+                    if(user_prefered_rating > 0 && rating >= user_prefered_rating) {
                         FoodItem item = new FoodItem(name, pictures.get(i).toString(), price, id, rating, open, longitude, latitude);
                         fooditems.add(item);
-                        if (i > 2) {
+                        if (i >= getImageIndex(id) + 2) {
                             break;
                         }
                     } else if (user_prefered_rating == 0) {
                         FoodItem item = new FoodItem(name, pictures.get(i).toString(), price, id, rating, open, longitude, latitude);
                         fooditems.add(item);
-                        if (i > 2) {
+                        if (i >= getImageIndex(id) + 2) {
                             break;
                         }
                     }

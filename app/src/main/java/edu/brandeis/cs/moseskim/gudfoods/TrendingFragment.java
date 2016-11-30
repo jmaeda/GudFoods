@@ -31,7 +31,7 @@ public class TrendingFragment extends Fragment {
         rootView = inflater.inflate(R.layout.trending_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView2);
 
-        new DynamoDBTrendingListTask().execute(DynamoDBManagerType.LIST_TRENDING);
+//        new DynamoDBTrendingListTask().execute(DynamoDBManagerType.LIST_TRENDING);
 
 
         return rootView;
@@ -49,21 +49,21 @@ public class TrendingFragment extends Fragment {
             result.setTableStatus(tableStatus);
             result.setTaskType(types[0]);
 
-            if (types[0] == DynamoDBManagerType.LIST_TRENDING) {
-                if (tableStatus.equalsIgnoreCase("ACTIVE")) {
-                    final List<FoodItem_Dynamo> foodList = DynamoDBManager.listTrendingFoodItems();
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (foodList != null) {
-                                SwipedCustomAdapter swipedCustomAdapter = new SwipedCustomAdapter(getContext(), foodList);
-                                listView.setAdapter(swipedCustomAdapter);
-                            }
-                        }
-                    });
-                }
-            }
+//            if (types[0] == DynamoDBManagerType.LIST_TRENDING) {
+//                if (tableStatus.equalsIgnoreCase("ACTIVE")) {
+//                    final List<FoodItem_Dynamo> foodList = DynamoDBManager.listTrendingFoodItems();
+//
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (foodList != null) {
+//                                SwipedCustomAdapter swipedCustomAdapter = new SwipedCustomAdapter(getContext(), foodList);
+//                                listView.setAdapter(swipedCustomAdapter);
+//                            }
+//                        }
+//                    });
+//                }
+//            }
 
             return result;
         }
