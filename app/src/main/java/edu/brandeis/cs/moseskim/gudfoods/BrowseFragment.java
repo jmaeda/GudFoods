@@ -54,12 +54,10 @@ import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerTaskResult;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerType;
 import edu.brandeis.cs.moseskim.gudfoods.aws.FoodItem_Dynamo;
 import edu.brandeis.cs.moseskim.gudfoods.aws.TemporaryPreferences;
-import link.fls.swipestack.SwipeHelper;
 import link.fls.swipestack.SwipeStack;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-
 
 
 public class BrowseFragment extends Fragment{
@@ -75,7 +73,6 @@ public class BrowseFragment extends Fragment{
     private String token;
     private String username;
     private String rating;
-    private int fakeSwipe;
 
     double latitude;
     double longitude;
@@ -97,7 +94,6 @@ public class BrowseFragment extends Fragment{
     private boolean isSwipeRight;
 
 
-    private SwipeHelper swipeHelp;
     private ImageButton moreInfo;
     private Button mButtonLeft, mButtonRight;
     private FloatingActionButton mFab;
@@ -115,9 +111,6 @@ public class BrowseFragment extends Fragment{
         yelpService = new YelpService();
 
         moreInfo = (ImageButton) rootView.findViewById(R.id.info_button);
-
-        fakeSwipe = 1;
-        swipeHelp = new SwipeHelper(mSwipeStack);
         mButtonLeft = (Button) rootView.findViewById(R.id.buttonSwipeLeft);
         mButtonLeft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,14 +215,14 @@ public class BrowseFragment extends Fragment{
 
                             mAdapter = new SwipeStackAdapter(getActivity(), entriesforUI);
                             mSwipeStack.setAdapter(mAdapter);
+                            if(entriesforUI.size()==0) {
+                                Toast.makeText(getContext(), "There are no resturaunts nearby",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                             if(refreshed) {
                                 mSwipeStack.resetStack();
                                 refreshed = false;
                             }
-
-
-
-
                         }
                     });
                 }
@@ -330,6 +323,7 @@ public class BrowseFragment extends Fragment{
             pDialog.show();
             yelpService.setRating(rating);
             yelpService.advancedSearch(longitude, latitude, flag, location, price, radius, token, findRestaurantsCallback);
+            refreshed = true;
         }
     }
 
@@ -544,15 +538,18 @@ public class BrowseFragment extends Fragment{
             if (convertView == null) {
                 convertView = getActivity().getLayoutInflater().inflate(R.layout.cards, parent, false);
             }
-
-
+            TextView starText = (TextView) convertView.findViewById(R.id.star_text);
+            if(item.getRating()!=null) {
+                starText.setText(item.getRating().toString());
+            }
             image = (NetworkImageView) convertView.findViewById(R.id.textViewCard);
             image.setImageUrl(item.getImageURL(), AppController.getInstance().getImageLoader());
 
-            TextView nameAndPrice = (TextView) convertView.findViewById(R.id.nameResturaunt);
-            nameAndPrice.setText("" + item.getBusinessName() + " " + item.getPrice());
-            Log.d("TEST 222222222222222222","IS THIS METHOD BEING CALLED");
+            TextView name = (TextView) convertView.findViewById(R.id.nameResturaunt);
+            name.setText("" + item.getBusinessName());
 
+            TextView priceRating = (TextView) convertView.findViewById(R.id.priceRating);
+            priceRating.setText("" + item.getPrice());
 
 
             return convertView;
@@ -593,6 +590,4 @@ public class BrowseFragment extends Fragment{
             }
         }
     }
-
-
 }
