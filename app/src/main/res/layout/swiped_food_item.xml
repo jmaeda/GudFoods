@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:text="Find It!"
             android:id="@+id/button" />
-
+1
         <Space
             android:layout_width="40px"
             android:layout_height="20px" />
