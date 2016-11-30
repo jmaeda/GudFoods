@@ -107,7 +107,6 @@ public class BrowseFragment extends Fragment{
         rootView = inflater.inflate(R.layout.browse_fragment, container, false);
         button = (Button) rootView.findViewById(R.id.browse);
         advanced = (Button) rootView.findViewById(R.id.advanced_search);
-        settings = (Button) rootView.findViewById(R.id.signout);
         yelpService = new YelpService();
 
         moreInfo = (ImageButton) rootView.findViewById(R.id.info_button);
@@ -288,15 +287,6 @@ public class BrowseFragment extends Fragment{
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AdvancedSearchActivity.class);
                 startActivityForResult(intent, 1);
-            }
-        });
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AWSService.getPool().getUser(username).signOut();
-                AWSService.setUser("");
-                getActivity().setResult(Activity.RESULT_OK);
-                getActivity().finish();
             }
         });
 
