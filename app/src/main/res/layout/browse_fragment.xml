@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:id="@+id/layoutview"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:background="@color/backGroundColor"
 
     >
 
@@ -12,6 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:textSize="22sp"
+        android:textStyle="bold"
         android:textColor="#ff0000"
         android:text="No"/>
 
@@ -22,50 +24,59 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:textSize="22sp"
+        android:textStyle="bold"
         android:textColor="#00ff00"
         android:text="Yes"/>
-
-    <ImageButton
-        android:id="@+id/info_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/more_info"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/search_button"
+        android:textColor="@android:color/white"
+        android:background="@color/colorAccent"
         android:id="@+id/browse"
+        android:layout_toLeftOf="@+id/center"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/center"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true"
+        />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/advanced_search"
+        android:textColor="@android:color/white"
+        android:background="@color/colorAccent"
         android:id="@+id/advanced_search"
         android:layout_toRightOf="@+id/browse"
-        android:layout_alignParentTop="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sign Out"
-        android:id="@+id/signout"
-        android:layout_toRightOf="@+id/advanced_search"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:layout_alignParentTop="true" />
 
     <link.fls.swipestack.SwipeStack
         android:id="@+id/swipeStack"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/browse"
-        android:layout_above="@+id/buttonSwipeLeft"
+        android:layout_height="wrap_content"
         android:padding="@dimen/padding_swipestack"
-        app:stack_rotation="10"
-        app:stack_size="3"/>
+        app:stack_rotation="6"
+        app:stack_size="3"
+        android:layout_below="@id/browse"
+        android:layout_above="@+id/info_button"
+        android:layout_alignParentStart="true" />
+
+    <ImageButton
+        android:id="@+id/info_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/information"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

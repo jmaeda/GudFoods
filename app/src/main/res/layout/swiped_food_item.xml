@@ -1,43 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.android.volley.toolbox.NetworkImageView
-        android:id="@+id/thumbnail2"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignParentLeft="true"
-        android:layout_marginRight="8dp" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView2" />
-
+    android:layout_height="match_parent"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp">
+    
+    
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical">
+        android:paddingLeft="15dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingRight="15dp"
+        android:background="@drawable/card_background_selector"
+        >
+
+
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/thumbnail2"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="8dp" />
+
+        <Space
+            android:layout_width="40px"
+            android:layout_height="20px"
+            android:layout_weight="1" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Find It!"
-            android:id="@+id/button" />
-
-        <Space
-            android:layout_width="40px"
-            android:layout_height="20px" />
+            android:id="@+id/button"
+            android:layout_weight="1"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/button2"
+            android:layout_marginEnd="12dp" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rate it!"
+            android:text="Remove"
             android:id="@+id/button2"
-            android:layout_gravity="center_vertical" />
+            android:layout_weight="1"
+            android:layout_marginEnd="12dp"
+            android:layout_below="@+id/space3"
+            android:layout_alignParentEnd="true" />
 
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>

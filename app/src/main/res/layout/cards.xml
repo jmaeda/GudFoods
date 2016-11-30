@@ -32,11 +32,25 @@
                 android:id="@+id/nameResturaunt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".7"
+                android:layout_weight=".5"
                 android:gravity="center"
                 android:layout_alignParentBottom="true"
                 android:layout_margin="5dp"
-                android:textSize="14sp"/>
+                android:textSize="13sp"
+                android:ellipsize="end"
+                android:maxLines="1"/>
+
+            <TextView
+                android:id="@+id/priceRating"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".2"
+                android:gravity="center"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="5dp"
+                android:textSize="22sp"
+                android:textColor="#29f516"
+                android:textStyle="bold"/>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -52,12 +66,12 @@
 
 
                 <TextView
-                    android:id="@+id/dp_msg"
+                    android:id="@+id/star_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:layout_alignParentBottom="true"
-                    android:text="5 "
+                    android:text="--"
                     android:textSize="22sp"/>
             </LinearLayout>
 
