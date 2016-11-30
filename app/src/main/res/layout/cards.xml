@@ -36,7 +36,9 @@
                 android:gravity="center"
                 android:layout_alignParentBottom="true"
                 android:layout_margin="5dp"
-                android:textSize="14sp"/>
+                android:textSize="13sp"
+                android:ellipsize="end"
+                android:maxLines="1"/>
 
             <TextView
                 android:id="@+id/priceRating"

@@ -40,7 +40,7 @@ public class SwipeStack extends ViewGroup {
     public static final int DEFAULT_ANIMATION_DURATION = 300;
     public static final int DEFAULT_STACK_SIZE = 3;
     public static final int DEFAULT_STACK_ROTATION = 8;
-    public static final float DEFAULT_SWIPE_ROTATION = 30f;
+    public static final float DEFAULT_SWIPE_ROTATION = 22f;
     public static final float DEFAULT_SWIPE_OPACITY = 1f;
     public static final float DEFAULT_SCALE_FACTOR = 1f;
     public static final boolean DEFAULT_DISABLE_HW_ACCELERATION = true;
