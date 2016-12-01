@@ -104,7 +104,8 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
                 String message = "This app was created by Moses Kim, Jonathan Maeda, Alex Suk" +
-                        " and Chunghyuk Takahashi.";
+                        " and Chungyuk Takahashi. The various icons used in this app were obtained" +
+                        " from the site icons8.com";
 
                 builder.setTitle("About")
                         .setMessage(message)
