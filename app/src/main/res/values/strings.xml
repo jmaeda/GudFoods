@@ -59,5 +59,7 @@
     <string name="reset">Reset stack</string>
     <string name="stack_reset">Stack reset!</string>
     <string name="stack_empty">Card stack empty!</string>
+    <string name="swipe_left_no">No</string>
+    <string name="swipe_right_yes">Yes</string>
 
 </resources>

@@ -15,7 +15,7 @@
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="#ff0000"
-        android:text="No"/>
+        android:text="@string/swipe_left_no"/>
 
     <Button
         android:id="@+id/buttonSwipeRight"
@@ -27,7 +27,7 @@
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="#00ff00"
-        android:text="Yes"/>
+        android:text="@string/swipe_right_yes"/>
 
     <Button
         android:layout_width="wrap_content"
