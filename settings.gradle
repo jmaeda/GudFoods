@@ -1,1 +1,1 @@
-include ':app', 'SwipeStackLib', ':swipestack'
+include ':app', 'SwipeStackLib'

@@ -49,7 +49,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_margin="5dp"
                 android:textSize="22sp"
-                android:textColor="#29f516"
+                android:textColor="#73ce84"
                 android:textStyle="bold"/>
 
             <LinearLayout

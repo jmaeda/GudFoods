@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/GudFoods.iml" filepath="$PROJECT_DIR$/GudFoods.iml" />
       <module fileurl="file://$PROJECT_DIR$/SwipeStackLib/SwipeStackLib.iml" filepath="$PROJECT_DIR$/SwipeStackLib/SwipeStackLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/swipestack/swipestack.iml" filepath="$PROJECT_DIR$/swipestack/swipestack.iml" />
     </modules>
   </component>
 </project>
