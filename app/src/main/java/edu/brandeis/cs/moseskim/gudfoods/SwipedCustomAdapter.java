@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.NetworkImageView;
 
@@ -74,6 +75,10 @@ public class SwipedCustomAdapter extends ArrayAdapter<FoodItem_Dynamo> {
                 entries.remove(position);
                 notifyDataSetChanged();
                 new DynamoDBRemoveSwipeTask().execute(DynamoDBManagerType.REMOVE_USER_SWIPE);
+                Toast.makeText(
+                        context,
+                        "Item Deleted From List", Toast.LENGTH_SHORT)
+                        .show();
             }
         });
 
