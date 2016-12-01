@@ -273,10 +273,29 @@ public class BrowseFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 mSwipeStack.invalidate();
-                pDialog.show();
-                findLocation();
-                yelpService.findRestaurants(latitude, longitude, token, findRestaurantsCallback);
-                refreshed = true;
+
+                if(TemporaryPreferences.changed == false) {
+                    pDialog.show();
+                    findLocation();
+                    yelpService.findRestaurants(latitude, longitude, token, findRestaurantsCallback);
+                    refreshed = true;
+                } else {
+                    String location = TemporaryPreferences.theLocation;
+                    Boolean flag = false;
+                    if(location.equals("") || location.equals("current")){
+                        findLocation();
+                        flag = true;
+                    }
+
+                    String rating = TemporaryPreferences.theRating;
+                    String price = TemporaryPreferences.thePrice;
+                    String radius = TemporaryPreferences.theRadius;
+
+                    pDialog.show();
+                    yelpService.setRating(rating);
+                    yelpService.advancedSearch(longitude, latitude, flag, location, price, radius, token, findRestaurantsCallback);
+                    refreshed = true;
+                }
 
             }
         });
@@ -297,6 +316,7 @@ public class BrowseFragment extends Fragment{
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            TemporaryPreferences.changed = true;
             String location = (String) data.getExtras().get("location");
             Boolean flag = false;
             if(location.equals("") || location.equals("current")){

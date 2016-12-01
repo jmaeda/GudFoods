@@ -34,9 +34,10 @@
         android:layout_height="wrap_content"
         android:text="@string/search_button"
         android:textColor="@android:color/white"
-        android:background="@color/colorAccent"
+        android:background="@drawable/special_button"
         android:id="@+id/browse"
         android:layout_toLeftOf="@+id/center"
+        android:elevation="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"/>
 
@@ -53,7 +54,7 @@
         android:layout_height="wrap_content"
         android:text="@string/advanced_search"
         android:textColor="@android:color/white"
-        android:background="@color/colorAccent"
+        android:background="@drawable/special_button"
         android:id="@+id/advanced_search"
         android:layout_toRightOf="@+id/browse"
         android:layout_marginLeft="10dp"
