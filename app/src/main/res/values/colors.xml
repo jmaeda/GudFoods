@@ -5,6 +5,7 @@
     <color name="colorAccent">#ffb377</color>
     <color name="black">#000000</color>
 
+    <color name="colorAccentLight">#ffc300</color>
     <color name="label">#000000</color>
     <color name="selection">#666666</color>
 
