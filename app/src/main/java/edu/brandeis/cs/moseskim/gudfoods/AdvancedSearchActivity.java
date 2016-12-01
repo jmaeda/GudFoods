@@ -65,8 +65,10 @@ public class AdvancedSearchActivity extends AppCompatActivity{
                 String loc = location.getText().toString();
 
                 if(loc.equals("")){
+                    TemporaryPreferences.theLocation = "current";
                     returnIntent.putExtra("location","current");
                 } else {
+                    TemporaryPreferences.theLocation = loc;
                     returnIntent.putExtra("location", loc);
                 }
 
@@ -128,18 +130,23 @@ public class AdvancedSearchActivity extends AppCompatActivity{
                 if(text.equals("1 Star (Default)")){
                     Log.d("rating","1 star default");
                     TemporaryPreferences.ratingInt = 0;
+                    TemporaryPreferences.theRating = "1";
                     returnIntent.putExtra("rating","1");
                 } else if(text.equals("2 Stars")){
                     TemporaryPreferences.ratingInt = 1;
+                    TemporaryPreferences.theRating = "2";
                     returnIntent.putExtra("rating","2");
                 } else if(text.equals("3 Stars")){
                     TemporaryPreferences.ratingInt = 2;
+                    TemporaryPreferences.theRating = "3";
                     returnIntent.putExtra("rating","3");
                 } else if(text.equals("4 Stars")){
                     TemporaryPreferences.ratingInt = 3;
+                    TemporaryPreferences.theRating = "4";
                     returnIntent.putExtra("rating","4");
                 } else if(text.equals("5 Stars")){
                     TemporaryPreferences.ratingInt = 4;
+                    TemporaryPreferences.theRating = "5";
                     returnIntent.putExtra("rating","5");
                 }
             }
@@ -162,15 +169,19 @@ public class AdvancedSearchActivity extends AppCompatActivity{
                 //1609--1, 8046--5, 16093--10, 24140--15, 32187--20
                 if(text.equals("10 Miles")){
                     TemporaryPreferences.radiusInt = 0;
+                    TemporaryPreferences.theRadius = "16093";
                     returnIntent.putExtra("radius","16093");
                 } else if(text.equals("5 Miles (Default)")){
                     TemporaryPreferences.radiusInt = 1;
+                    TemporaryPreferences.theRadius = "8046";
                     returnIntent.putExtra("radius","8046");
                 } else if(text.equals("2 Miles")){
                     TemporaryPreferences.radiusInt = 2;
+                    TemporaryPreferences.theRadius = "3218";
                     returnIntent.putExtra("radius","3218");
                 } else if(text.equals("1 Mile")){
                     TemporaryPreferences.radiusInt = 3;
+                    TemporaryPreferences.theRadius = "1609";
                     returnIntent.putExtra("radius","1609");
                 }
             }
@@ -229,6 +240,7 @@ public class AdvancedSearchActivity extends AppCompatActivity{
                 priceString = priceString + "," + i;
             }
         }
+        TemporaryPreferences.thePrice = priceString;
         returnIntent.putExtra("price",priceString);
     }
 }

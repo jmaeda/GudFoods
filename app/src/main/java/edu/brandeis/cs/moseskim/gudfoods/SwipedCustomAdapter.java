@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 
@@ -46,7 +48,7 @@ public class SwipedCustomAdapter extends ArrayAdapter<FoodItem_Dynamo> {
         if (convertview == null){
             convertview = LayoutInflater.from(getContext()).inflate(R.layout.swiped_food_item, null, true);
         }
-        Button findItem = (Button) convertview.findViewById(R.id.button);
+        ImageButton findItem = (ImageButton) convertview.findViewById(R.id.button);
         findItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,7 +71,28 @@ public class SwipedCustomAdapter extends ArrayAdapter<FoodItem_Dynamo> {
         });
 
         image = (NetworkImageView) convertview.findViewById(R.id.thumbnail2);
-        image.setImageUrl(item.getImageURL(), AppController.getInstance().getImageLoader());
+        if(item != null) {
+            image.setImageUrl(item.getImageURL(), AppController.getInstance().getImageLoader());
+        }
+        //implment delete button
+        ImageButton delete = (ImageButton) convertview.findViewById(R.id.delete);
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        TextView businessName = (TextView) convertview.findViewById(R.id.textView3);
+        TextView rating = (TextView) convertview.findViewById(R.id.textView4);
+        TextView price = (TextView) convertview.findViewById(R.id.textView5);
+
+        businessName.setText(item.getBusinessName());
+        rating.setText(Double.toString(item.getRating()));
+        price.setText(item.getPrice());
+
+
 
         return convertview;
     }

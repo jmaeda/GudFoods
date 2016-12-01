@@ -23,14 +23,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.toolbox.NetworkImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,7 +44,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import edu.brandeis.cs.moseskim.gudfoods.aws.AWSService;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManager;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerTaskResult;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerType;
@@ -89,6 +84,8 @@ public class BrowseFragment extends Fragment{
     private Callback entriesCallback;
     private Callback finalCallback;
     private Callback findRestaurantsCallback;
+
+//    private int onEmpty = 1; //if it is 1, it will refresh from local, if it is 2, it will refresh from the
 
     private FoodItem fi;
     private boolean isSwipeRight;
@@ -161,6 +158,7 @@ public class BrowseFragment extends Fragment{
             @Override
             public void onStackEmpty() {
                 Toast.makeText(getContext(), R.string.stack_empty, Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -210,7 +208,6 @@ public class BrowseFragment extends Fragment{
                         @Override
                         public void run() {
                             Log.d("uiEntries", "#" + entries.size());
-                            Log.d("RIGHT BEFORE ADAPT", "SOMETHING HAPPENING PLEASE");
                             entriesforUI = entries;
 
                             mAdapter = new SwipeStackAdapter(getActivity(), entriesforUI);
@@ -276,10 +273,29 @@ public class BrowseFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 mSwipeStack.invalidate();
-                pDialog.show();
-                findLocation();
-                yelpService.findRestaurants(latitude, longitude, token, findRestaurantsCallback);
-                refreshed = true;
+
+                if(TemporaryPreferences.changed == false) {
+                    pDialog.show();
+                    findLocation();
+                    yelpService.findRestaurants(latitude, longitude, token, findRestaurantsCallback);
+                    refreshed = true;
+                } else {
+                    String location = TemporaryPreferences.theLocation;
+                    Boolean flag = false;
+                    if(location.equals("") || location.equals("current")){
+                        findLocation();
+                        flag = true;
+                    }
+
+                    String rating = TemporaryPreferences.theRating;
+                    String price = TemporaryPreferences.thePrice;
+                    String radius = TemporaryPreferences.theRadius;
+
+                    pDialog.show();
+                    yelpService.setRating(rating);
+                    yelpService.advancedSearch(longitude, latitude, flag, location, price, radius, token, findRestaurantsCallback);
+                    refreshed = true;
+                }
 
             }
         });
@@ -300,6 +316,7 @@ public class BrowseFragment extends Fragment{
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            TemporaryPreferences.changed = true;
             String location = (String) data.getExtras().get("location");
             Boolean flag = false;
             if(location.equals("") || location.equals("current")){
@@ -489,63 +506,11 @@ public class BrowseFragment extends Fragment{
         } else if (v.equals(mButtonRight)) {
             mSwipeStack.swipeTopViewToRight();
         } else if (v.equals(mFab)) {
-//            mData.add(getString(R.string.dummy_fab));
             mAdapter.notifyDataSetChanged();
         }
     }
 
 
-
-    public class SwipeStackAdapter extends ArrayAdapter<FoodItem> {
-
-        private ArrayList<FoodItem> foodEntries;
-
-        public SwipeStackAdapter(Context context, ArrayList<FoodItem> array){
-            super(context,R.layout.cards,array);
-            this.foodEntries = array;
-        }
-
-        @Override
-        public int getCount() {
-            return foodEntries.size();
-        }
-
-        @Override
-        public FoodItem getItem(int position) {
-            return foodEntries.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            NetworkImageView image;
-
-            FoodItem item = getItem(position);
-
-            if (convertView == null) {
-                convertView = getActivity().getLayoutInflater().inflate(R.layout.cards, parent, false);
-            }
-            TextView starText = (TextView) convertView.findViewById(R.id.star_text);
-            if(item.getRating()!=null) {
-                starText.setText(item.getRating().toString());
-            }
-            image = (NetworkImageView) convertView.findViewById(R.id.textViewCard);
-            image.setImageUrl(item.getImageURL(), AppController.getInstance().getImageLoader());
-
-            TextView name = (TextView) convertView.findViewById(R.id.nameResturaunt);
-            name.setText("" + item.getBusinessName());
-
-            TextView priceRating = (TextView) convertView.findViewById(R.id.priceRating);
-            priceRating.setText("" + item.getPrice());
-
-
-            return convertView;
-        }
-    }
 
     private class DynamoDBImageSwipeTask extends
             AsyncTask<DynamoDBManagerType, Void, DynamoDBManagerTaskResult> {

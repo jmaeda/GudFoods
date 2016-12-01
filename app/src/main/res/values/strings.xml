@@ -21,7 +21,8 @@
     <string name="fb_login_protocol_scheme">fb547694018773328</string>
 
     <string name="search_button">Refresh</string>
-    <string name="advanced_search">Search</string>
+    <string name="advanced_search">Filter</string>
+    <string name="advanced_search_title">Filter Parameters</string>
     <string name="settings_button">Settings</string>
 
     <string name="location_label">Location:</string>
