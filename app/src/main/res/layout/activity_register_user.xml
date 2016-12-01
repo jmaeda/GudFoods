@@ -108,12 +108,20 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Enter at least one of the two options below."
+        android:id="@+id/phone_email_info"
+        android:layout_below="@+id/textViewUserRegPasswordMessage"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textSize="@dimen/activity_text_size_small"
         android:text=" "
         android:id="@+id/textViewRegEmailLabel"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/textViewUserRegPasswordMessage" />
+        android:layout_below="@id/phone_email_info" />
 
     <EditText
         android:layout_width="match_parent"

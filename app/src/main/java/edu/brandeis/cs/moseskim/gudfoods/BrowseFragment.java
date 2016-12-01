@@ -486,7 +486,6 @@ public class BrowseFragment extends Fragment{
         } else if (v.equals(mButtonRight)) {
             mSwipeStack.swipeTopViewToRight();
         } else if (v.equals(mFab)) {
-//            mData.add(getString(R.string.dummy_fab));
             mAdapter.notifyDataSetChanged();
         }
     }

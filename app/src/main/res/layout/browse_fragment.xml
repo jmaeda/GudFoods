@@ -77,6 +77,8 @@
         android:layout_height="wrap_content"
         android:src="@drawable/information"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:onClick=""/>
 
 </RelativeLayout>
