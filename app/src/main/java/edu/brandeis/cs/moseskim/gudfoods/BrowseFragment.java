@@ -57,6 +57,8 @@ import okhttp3.Response;
 
 public class BrowseFragment extends Fragment{
 
+    private static final String TAG = "BrowseFragment";
+
     private Button button;
     private Button advanced;
     private Button settings;
@@ -99,7 +101,7 @@ public class BrowseFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("TEST 1","TESTING");
+        Log.d(TAG, "CreateView");
 
         rootView = inflater.inflate(R.layout.browse_fragment, container, false);
         button = (Button) rootView.findViewById(R.id.browse);
@@ -541,9 +543,9 @@ public class BrowseFragment extends Fragment{
         }
 
         protected void onPostExecute(DynamoDBManagerTaskResult result) {
-            if (result.getTaskType() == DynamoDBManagerType.LIST_USERS_SWIPES
+            if (result.getTaskType() == DynamoDBManagerType.INSERT_USER_SWIPE
                     && result.getTableStatus().equalsIgnoreCase("ACTIVE")) {
-                new DynamoDBImageSwipeTask().execute(DynamoDBManagerType.LIST_USERS_SWIPES);
+
             } else if (!result.getTableStatus().equalsIgnoreCase("ACTIVE")) {
                 Toast.makeText(
                         BrowseFragment.this.getActivity(),

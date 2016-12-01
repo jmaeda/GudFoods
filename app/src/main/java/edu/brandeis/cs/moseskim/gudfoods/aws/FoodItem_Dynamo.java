@@ -100,8 +100,27 @@ public class FoodItem_Dynamo implements Comparable{
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (o instanceof FoodItem_Dynamo) {
+            return this.getImageURL().equals(((FoodItem_Dynamo) o).getImageURL());
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 17 * hash + (this.getImageURL() != null ? this.getImageURL().hashCode() : 0);
+        return hash;
+    }
+
+    @Override
     public int compareTo(Object o) {
         if (o instanceof FoodItem_Dynamo) {
+            if (((FoodItem_Dynamo) o).getImageURL().equals(this.getImageURL())) {
+                return 0;
+            }
             return ((FoodItem_Dynamo) o).getSwipeRightCount() - this.getSwipeRightCount();
         } else {
             return -1;

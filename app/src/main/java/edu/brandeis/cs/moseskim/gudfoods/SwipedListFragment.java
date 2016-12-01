@@ -5,18 +5,21 @@ package edu.brandeis.cs.moseskim.gudfoods;
  */
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-import edu.brandeis.cs.moseskim.gudfoods.aws.AmazonClientManager;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManager;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerTaskResult;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerType;
@@ -25,17 +28,23 @@ import edu.brandeis.cs.moseskim.gudfoods.aws.UserSwipe_Dynamo;
 
 public class SwipedListFragment extends Fragment {
 
+    private static final String TAG = "SwipedListFragment";
+
     private View rootView;
     private static ListView listView;
     private String username;
-    public static AmazonClientManager clientManager = null;
-
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "CreateView");
         rootView = inflater.inflate(R.layout.swiped_list_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView2);
 
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
 
         username = getArguments().getString("username");
         new DynamoDBSwipedListTask().execute(DynamoDBManagerType.LIST_USERS_SWIPES);
@@ -71,13 +80,18 @@ public class SwipedListFragment extends Fragment {
             if (types[0] == DynamoDBManagerType.LIST_USERS_SWIPES) {
                 if (tableStatus.equalsIgnoreCase("ACTIVE")) {
                     List<UserSwipe_Dynamo> userSwipes = DynamoDBManager.listUserSwipeRights(username);
-                    final List<FoodItem_Dynamo> foodList = DynamoDBManager.listFoodItems(userSwipes);
-
+                    Map<UserSwipe_Dynamo, FoodItem_Dynamo> foodMap = DynamoDBManager.listFoodItems(userSwipes);
+                    final List<FoodItem_Dynamo> visibleList = new LinkedList<>();
+                    for (UserSwipe_Dynamo u : foodMap.keySet()) {
+                        if (u.isSwipeRight() && !u.isDeleted()) {
+                            visibleList.add(foodMap.get(u));
+                        }
+                    }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (foodList != null) {
-                                SwipedCustomAdapter swipedCustomAdapter = new SwipedCustomAdapter(getContext(), foodList, username);
+                            if (visibleList != null) {
+                                SwipedCustomAdapter swipedCustomAdapter = new SwipedCustomAdapter(getContext(), visibleList, username);
                                 listView.setAdapter(swipedCustomAdapter);
                             }
                         }
@@ -91,7 +105,7 @@ public class SwipedListFragment extends Fragment {
         protected void onPostExecute(DynamoDBManagerTaskResult result) {
             if (result.getTaskType() == DynamoDBManagerType.LIST_USERS_SWIPES
                     && result.getTableStatus().equalsIgnoreCase("ACTIVE")) {
-
+                progressDialog.dismiss();
             } else if (!result.getTableStatus().equalsIgnoreCase("ACTIVE")) {
                 Toast.makeText(
                         SwipedListFragment.this.getActivity(),

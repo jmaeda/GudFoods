@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/listView2"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="61dp"
+        android:layout_alignParentTop="true"
         android:divider="@null"
         android:dividerHeight="10dp"
         android:layout_centerInParent="true" />

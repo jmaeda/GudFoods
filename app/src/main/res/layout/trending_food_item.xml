@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="15dp"
@@ -8,47 +9,138 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="98dp"
         android:paddingLeft="15dp"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         android:paddingRight="15dp"
         android:background="@drawable/card_background_selector"
-        >
+        android:weightSum="1">
 
 
         <com.android.volley.toolbox.NetworkImageView
             android:id="@+id/thumbnail2"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="67dp"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_marginRight="8dp" />
 
-        <Space
-            android:layout_width="40px"
-            android:layout_height="20px"
-            android:layout_weight="1" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="191dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:weightSum="1">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Find It!"
-            android:id="@+id/button" />
-        1
-        <Space
-            android:layout_width="40px"
-            android:layout_height="20px" />
+            <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3"
+                android:textSize="18sp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.71" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="192dp"
+                android:layout_height="36dp">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="23dp"
+                    app:srcCompat="@drawable/star"
+                    android:id="@+id/imageView2"
+                    android:scaleType="fitXY"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignStart="@+id/textView4"
+                    android:layout_toStartOf="@+id/textView5"
+                    android:layout_below="@+id/textView4" />
+
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:id="@+id/textView4"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_weight="0.29"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="22dp"
+                    android:layout_height="23dp"
+                    android:id="@+id/textView5"
+                    android:layout_weight="1.02"
+                    android:layout_below="@+id/textView4"
+                    android:textColor="@color/dollar_color"
+                    android:gravity="center"
+                    android:textSize="18sp" />
 
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Remove"
-            android:id="@+id/button2"
-            android:layout_weight="1"
-            android:layout_marginEnd="12dp"
-            android:layout_below="@+id/space3"
-            android:layout_alignParentEnd="true" />
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="3dp"
+                    app:srcCompat="@drawable/heart"
+                    android:id="@+id/heart"
+                    android:scaleType="fitXY" />
+
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/swipeRightCount"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1.02"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="37dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_weight="0.19">
+
+            <Space
+                android:id="@+id/space2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true" />
+
+            <ImageButton
+                android:id="@+id/button"
+                android:background="@null"
+                android:src="@drawable/information"
+                android:layout_width="@dimen/activity_inter_group_separation"
+                android:layout_height="@dimen/activity_inter_group_separation"
+                android:scaleType="fitXY"
+                android:layout_weight="0.03"
+                android:layout_below="@+id/space2"
+                android:layout_alignStart="@+id/plus" />
+
+            <ImageButton
+                android:background="@null"
+                android:src="@drawable/plus"
+                android:layout_width="@dimen/activity_inter_group_separation"
+                android:layout_height="@dimen/activity_inter_group_separation"
+                android:scaleType="fitXY"
+                android:layout_weight="0.04"
+                android:id="@+id/plus"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/space2" />
+        </RelativeLayout>
+
 
     </LinearLayout>
 

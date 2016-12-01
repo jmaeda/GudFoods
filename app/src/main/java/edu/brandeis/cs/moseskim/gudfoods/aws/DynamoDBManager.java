@@ -31,8 +31,9 @@ import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.brandeis.cs.moseskim.gudfoods.Constants;
 import edu.brandeis.cs.moseskim.gudfoods.FoodItem;
@@ -111,6 +112,16 @@ public class DynamoDBManager {
             }
         }
         mapper.save(foodItem);
+    }
+
+    public static void incrementFoodItem(FoodItem_Dynamo foodItemDynamo) {
+        if (foodItemDynamo != null) {
+            AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
+            DynamoDBMapper mapper = new DynamoDBMapper(ddb);
+
+            foodItemDynamo.setSwipeRightCount(foodItemDynamo.getSwipeRightCount() + 1);
+            mapper.save(foodItemDynamo);
+        }
     }
 
     public static void insertUserSwipe(String username, String foodURL, boolean isSwipeRight) {
@@ -203,21 +214,19 @@ public class DynamoDBManager {
         return resultsList;
     }
 
-    public static List<FoodItem_Dynamo> listFoodItems(List<UserSwipe_Dynamo> list) {
+    public static Map<UserSwipe_Dynamo, FoodItem_Dynamo> listFoodItems(List<UserSwipe_Dynamo> list) {
 
         AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
 
-        List<FoodItem_Dynamo> foodList = new LinkedList<>();
+        Map<UserSwipe_Dynamo, FoodItem_Dynamo> foodMap = new HashMap<>();
         FoodItem_Dynamo foodItem;
         for (UserSwipe_Dynamo u : list) {
-            if (u.isSwipeRight() && !u.isDeleted()) {
                 foodItem = mapper.load(FoodItem_Dynamo.class, u.getFoodImageURL());
-                foodList.add(foodItem);
-            }
+                foodMap.put(u, foodItem);
         }
 
-        return foodList;
+        return foodMap;
     }
 
     public static List<FoodItem_Dynamo> listTrendingFoodItems() {

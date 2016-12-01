@@ -4,41 +4,61 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManager;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerTaskResult;
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerType;
 import edu.brandeis.cs.moseskim.gudfoods.aws.FoodItem_Dynamo;
+import edu.brandeis.cs.moseskim.gudfoods.aws.TrendingCustomAdapter;
+import edu.brandeis.cs.moseskim.gudfoods.aws.UserSwipe_Dynamo;
 
 /**
  * Created by Jon on 11/16/2016.
  */
 public class TrendingFragment extends Fragment {
 
+    private static final String TAG = "TrendingFragment";
+
     public static final Integer LIMIT = new Integer(30);
 
     private View rootView;
     private ListView listView;
+    private TextView loading;
     private String username;
     private ProgressDialog progressDialog;
+    private ProgressBar progressCircle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "Create View");
         rootView = inflater.inflate(R.layout.trending_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView2);
+        progressCircle = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        loading = (TextView) rootView.findViewById(R.id.loading);
         username = getArguments().getString("username");
 
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Loading...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+
+//        progressDialog = new ProgressDialog(getActivity());
+//        progressDialog.setMessage("Loading...");
+//        progressDialog.setCanceledOnTouchOutside(false);
+//        progressDialog.show();
+        progressCircle.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.VISIBLE);
+        listView.setVisibility(View.GONE);
+
 
         new DynamoDBTrendingListTask().execute(DynamoDBManagerType.LIST_TRENDING);
 
@@ -59,14 +79,21 @@ public class TrendingFragment extends Fragment {
 
             if (types[0] == DynamoDBManagerType.LIST_TRENDING) {
                 if (tableStatus.equalsIgnoreCase("ACTIVE")) {
-                    final List<FoodItem_Dynamo> foodList = DynamoDBManager.listTrendingFoodItems();
-
+                    final List<FoodItem_Dynamo> trendingFoodList = DynamoDBManager.listTrendingFoodItems();
+                    List<UserSwipe_Dynamo> userSwipes = DynamoDBManager.listUserSwipeRights(username);
+                    Map<UserSwipe_Dynamo, FoodItem_Dynamo> foodMap = DynamoDBManager.listFoodItems(userSwipes);
+                    final Set<FoodItem_Dynamo> visibleList = new HashSet<>();
+                    for (UserSwipe_Dynamo u : foodMap.keySet()) {
+                        if (u.isSwipeRight()) {
+                            visibleList.add(foodMap.get(u));
+                        }
+                    }
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (foodList != null) {
-                                    SwipedCustomAdapter swipedCustomAdapter = new SwipedCustomAdapter(getContext(), foodList, username);
+                                if (trendingFoodList != null) {
+                                    TrendingCustomAdapter swipedCustomAdapter = new TrendingCustomAdapter(getContext(), trendingFoodList, visibleList, username);
                                     listView.setAdapter(swipedCustomAdapter);
                                 }
                             }
@@ -81,7 +108,10 @@ public class TrendingFragment extends Fragment {
         protected void onPostExecute(DynamoDBManagerTaskResult result) {
             if (result.getTaskType() == DynamoDBManagerType.LIST_TRENDING
                     && result.getTableStatus().equalsIgnoreCase("ACTIVE")) {
-                progressDialog.dismiss();
+//                progressDialog.dismiss();
+                progressCircle.setVisibility(View.GONE);
+                loading.setVisibility(View.GONE);
+                listView.setVisibility(View.VISIBLE);
             } else if (!result.getTableStatus().equalsIgnoreCase("ACTIVE")) {
                 Toast.makeText(
                         TrendingFragment.this.getActivity(),

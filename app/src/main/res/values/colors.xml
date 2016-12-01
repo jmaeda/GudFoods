@@ -22,4 +22,5 @@
     <color name="dollar_color">#73ce84</color>
     <color name="backGroundColor">#fff7e5</color>
     <color name="button_default">#e15729</color>
+    <color name="star_color">#ffe553</color>
 </resources>

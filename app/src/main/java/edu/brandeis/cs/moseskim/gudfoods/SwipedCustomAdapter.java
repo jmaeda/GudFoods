@@ -59,16 +59,6 @@ public class SwipedCustomAdapter extends ArrayAdapter<FoodItem_Dynamo> {
                 context.startActivity(i);
             }
         });
-        Button deleteFoodItem = (Button) convertview.findViewById(R.id.button2);
-        deleteFoodItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                foodImageURL = item.getImageURL();
-                entries.remove(position);
-                notifyDataSetChanged();
-                new DynamoDBRemoveSwipeTask().execute(DynamoDBManagerType.REMOVE_USER_SWIPE);
-            }
-        });
 
         image = (NetworkImageView) convertview.findViewById(R.id.thumbnail2);
         if(item != null) {
@@ -80,7 +70,10 @@ public class SwipedCustomAdapter extends ArrayAdapter<FoodItem_Dynamo> {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                foodImageURL = item.getImageURL();
+                entries.remove(position);
+                notifyDataSetChanged();
+                new DynamoDBRemoveSwipeTask().execute(DynamoDBManagerType.REMOVE_USER_SWIPE);
             }
         });
 
