@@ -1,5 +1,6 @@
 package edu.brandeis.cs.moseskim.gudfoods;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,18 +22,22 @@ import edu.brandeis.cs.moseskim.gudfoods.aws.FoodItem_Dynamo;
  */
 public class TrendingFragment extends Fragment {
 
-    public static final Integer LIMIT = new Integer(3);
+    public static final Integer LIMIT = new Integer(30);
 
     private View rootView;
     private ListView listView;
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.trending_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView2);
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
 
-//        new DynamoDBTrendingListTask().execute(DynamoDBManagerType.LIST_TRENDING);
-
+        new DynamoDBTrendingListTask().execute(DynamoDBManagerType.LIST_TRENDING);
 
         return rootView;
     }
@@ -49,21 +54,23 @@ public class TrendingFragment extends Fragment {
             result.setTableStatus(tableStatus);
             result.setTaskType(types[0]);
 
-//            if (types[0] == DynamoDBManagerType.LIST_TRENDING) {
-//                if (tableStatus.equalsIgnoreCase("ACTIVE")) {
-//                    final List<FoodItem_Dynamo> foodList = DynamoDBManager.listTrendingFoodItems();
-//
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            if (foodList != null) {
-//                                SwipedCustomAdapter swipedCustomAdapter = new SwipedCustomAdapter(getContext(), foodList);
-//                                listView.setAdapter(swipedCustomAdapter);
-//                            }
-//                        }
-//                    });
-//                }
-//            }
+            if (types[0] == DynamoDBManagerType.LIST_TRENDING) {
+                if (tableStatus.equalsIgnoreCase("ACTIVE")) {
+                    final List<FoodItem_Dynamo> foodList = DynamoDBManager.listTrendingFoodItems();
+
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (foodList != null) {
+                                    SwipedCustomAdapter swipedCustomAdapter = new SwipedCustomAdapter(getContext(), foodList);
+                                    listView.setAdapter(swipedCustomAdapter);
+                                }
+                            }
+                        });
+                    }
+                }
+            }
 
             return result;
         }
@@ -71,7 +78,7 @@ public class TrendingFragment extends Fragment {
         protected void onPostExecute(DynamoDBManagerTaskResult result) {
             if (result.getTaskType() == DynamoDBManagerType.LIST_TRENDING
                     && result.getTableStatus().equalsIgnoreCase("ACTIVE")) {
-
+                progressDialog.dismiss();
             } else if (!result.getTableStatus().equalsIgnoreCase("ACTIVE")) {
                 Toast.makeText(
                         TrendingFragment.this.getActivity(),

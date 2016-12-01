@@ -7,7 +7,7 @@ package edu.brandeis.cs.moseskim.gudfoods.aws;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
 
 @DynamoDBTable(tableName = "FoodItem")
-public class FoodItem_Dynamo {
+public class FoodItem_Dynamo implements Comparable{
     private String imageURL;
     private String businessName;
     private String businessId;
@@ -97,5 +97,14 @@ public class FoodItem_Dynamo {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if (o instanceof FoodItem_Dynamo) {
+            return ((FoodItem_Dynamo) o).getSwipeRightCount() - this.getSwipeRightCount();
+        } else {
+            return -1;
+        }
     }
 }
