@@ -9,4 +9,10 @@ public class TemporaryPreferences {
     public static int minPriceInt = 0;
     public static int ratingInt = 0;
     public static int radiusInt = 1;
+
+    public static boolean changed = false;
+    public static String theLocation = "";
+    public static String theRating = "";
+    public static String thePrice = "";
+    public static String theRadius = "";
 }
