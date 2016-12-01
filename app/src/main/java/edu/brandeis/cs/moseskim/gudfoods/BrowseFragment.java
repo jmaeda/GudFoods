@@ -214,10 +214,6 @@ public class BrowseFragment extends Fragment{
 
                             mAdapter = new SwipeStackAdapter(getActivity(), entriesforUI);
                             mSwipeStack.setAdapter(mAdapter);
-                            if(entriesforUI.size()==0) {
-                                Toast.makeText(getContext(), "There are no resturaunts nearby",
-                                        Toast.LENGTH_SHORT).show();
-                            }
                             if(refreshed) {
                                 mSwipeStack.resetStack();
                                 refreshed = false;
@@ -257,6 +253,25 @@ public class BrowseFragment extends Fragment{
                     } else {
                         yelpService.pickImages(idList.get(i), token, entriesCallback);
                     }
+                }
+
+                if(idList.size() == 0){
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            entriesforUI = entries;
+
+                            mAdapter = new SwipeStackAdapter(getActivity(), entriesforUI);
+                            mSwipeStack.setAdapter(mAdapter);
+                            Toast.makeText(getContext(), "We weren't able to find anything",
+                                        Toast.LENGTH_SHORT).show();
+                            if(refreshed) {
+                                mSwipeStack.resetStack();
+                                refreshed = false;
+                            }
+                        }
+                    });
+                    pDialog.dismiss();
                 }
             }
         };
@@ -341,7 +356,7 @@ public class BrowseFragment extends Fragment{
 
         if ( ContextCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED){
-            Toast.makeText(getActivity(),"Permission has been granted",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(),"Permission has been granted",Toast.LENGTH_SHORT).show();
             LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
             Log.d("permission","granted");
 
