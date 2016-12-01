@@ -53,7 +53,9 @@ public class SwipedCustomAdapter extends ArrayAdapter<FoodItem_Dynamo> {
         });
 
         image = (NetworkImageView) convertview.findViewById(R.id.thumbnail2);
-        image.setImageUrl(item.getImageURL(), AppController.getInstance().getImageLoader());
+        if(item != null) {
+            image.setImageUrl(item.getImageURL(), AppController.getInstance().getImageLoader());
+        }
 
         return convertview;
     }
