@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main$Generated" generated="true"><source path="/Users/moseskim/StudioProjects/GudFoods/swipestack/src/main/res"/><source path="/Users/moseskim/StudioProjects/GudFoods/swipestack/build/generated/res/rs/debug"/><source path="/Users/moseskim/StudioProjects/GudFoods/swipestack/build/generated/res/resValues/debug"/></dataSet><dataSet config="debug$Generated" generated="true"><source path="/Users/moseskim/StudioProjects/GudFoods/swipestack/src/debug/res"/></dataSet><dataSet config="main" generated-set="main$Generated"><source path="/Users/moseskim/StudioProjects/GudFoods/swipestack/src/main/res"><file path="/Users/moseskim/StudioProjects/GudFoods/swipestack/src/main/res/values/attrs.xml" qualifiers=""><declare-styleable name="SwipeStack">
+        <attr format="integer" name="allowed_swipe_directions">
+            <enum name="only_left" value="1"/>
+            <enum name="only_right" value="2"/>
+            <enum name="both" value="0"/>
+        </attr>
+        <attr format="integer" name="animation_duration"/>
+        <attr format="integer" name="stack_size"/>
+        <attr format="dimension" name="stack_spacing"/>
+        <attr format="integer" name="stack_rotation"/>
+        <attr format="float" name="swipe_rotation"/>
+        <attr format="float" name="swipe_opacity"/>
+        <attr format="float" name="scale_factor"/>
+        <attr format="boolean" name="disable_hw_acceleration"/>
+    </declare-styleable></file><file path="/Users/moseskim/StudioProjects/GudFoods/swipestack/src/main/res/values/dimens.xml" qualifiers=""><dimen name="default_stack_spacing">12dp</dimen></file><file path="/Users/moseskim/StudioProjects/GudFoods/swipestack/src/main/res/values/strings.xml" qualifiers=""><string name="app_name">SwipeStack</string></file><file path="/Users/moseskim/StudioProjects/GudFoods/swipestack/src/main/res/values/tags.xml" qualifiers=""><item name="new_view" type="id"/></file></source><source path="/Users/moseskim/StudioProjects/GudFoods/swipestack/build/generated/res/rs/debug"/><source path="/Users/moseskim/StudioProjects/GudFoods/swipestack/build/generated/res/resValues/debug"/></dataSet><dataSet config="debug" generated-set="debug$Generated"><source path="/Users/moseskim/StudioProjects/GudFoods/swipestack/src/debug/res"/></dataSet><mergedItems><configuration qualifiers=""><declare-styleable name="SwipeStack"><attr format="integer" name="allowed_swipe_directions">
+            <enum name="only_left" value="1"/>
+            <enum name="only_right" value="2"/>
+            <enum name="both" value="0"/>
+        </attr><attr format="integer" name="animation_duration"/><attr format="integer" name="stack_size"/><attr format="dimension" name="stack_spacing"/><attr format="integer" name="stack_rotation"/><attr format="float" name="swipe_rotation"/><attr format="float" name="swipe_opacity"/><attr format="float" name="scale_factor"/><attr format="boolean" name="disable_hw_acceleration"/></declare-styleable></configuration></mergedItems></merger>
