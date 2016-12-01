@@ -33,11 +33,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Find It!"
-            android:id="@+id/button"
-            android:layout_weight="1"
-            android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/button2"
-            android:layout_marginEnd="12dp" />
+            android:id="@+id/button" />
+1
+        <Space
+            android:layout_width="40px"
+            android:layout_height="20px" />
+
 
         <Button
             android:layout_width="wrap_content"

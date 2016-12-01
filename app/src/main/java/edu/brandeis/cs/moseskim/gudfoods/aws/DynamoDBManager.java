@@ -24,22 +24,20 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExp
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedQueryList;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.DescribeTableRequest;
 import com.amazonaws.services.dynamodbv2.model.DescribeTableResult;
 import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import edu.brandeis.cs.moseskim.gudfoods.Constants;
 import edu.brandeis.cs.moseskim.gudfoods.FoodItem;
 import edu.brandeis.cs.moseskim.gudfoods.MainActivity;
 import edu.brandeis.cs.moseskim.gudfoods.TrendingFragment;
-
 
 public class DynamoDBManager {
 
@@ -215,31 +213,10 @@ public class DynamoDBManager {
         AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
 
-        List<FoodItem_Dynamo> foodList = new LinkedList<>();
-
-
-        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-
-//        DynamoDBQueryExpression<FoodItem_Dynamo> queryExpression = new DynamoDBQueryExpression<>();
-//
-//        queryExpression.setLimit(TrendingFragment.LIMIT);
-//
-//        mapper.query(FoodItem_Dynamo.class, queryExpression);
-
-//        DynamoDBQueryExpression queryExpression = new DynamoDBQueryExpression();
-//        queryExpression.setLimit(TrendingFragment.LIMIT);
-//        queryExpression.setScanIndexForward(false);
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
-
-
-//        foodList = mapper.query(FoodItem_Dynamo.class,queryExpression);
-
-        String test = "";
-        for (int i = 0; i < TrendingFragment.LIMIT && i < foodList.size(); i++) {
-            test += foodList.get(i).getImageURL() + "\n";
-        }
-        Log.d("listTrendingFoodItems", test);
-        return foodList.subList(0, Math.min(TrendingFragment.LIMIT, foodList.size()));
+        List<FoodItem_Dynamo> list = new ArrayList<>(mapper.scan(FoodItem_Dynamo.class, scanExpression));
+        Collections.sort(list);
+        list = list.subList(0, Math.min(list.size(), TrendingFragment.LIMIT));
+        return list;
     }
-
 }

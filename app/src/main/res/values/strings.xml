@@ -21,7 +21,8 @@
     <string name="fb_login_protocol_scheme">fb547694018773328</string>
 
     <string name="search_button">Refresh</string>
-    <string name="advanced_search">Search</string>
+    <string name="advanced_search">Filter</string>
+    <string name="advanced_search_title">Filter Parameters</string>
     <string name="settings_button">Settings</string>
 
     <string name="location_label">Location:</string>
@@ -59,5 +60,7 @@
     <string name="reset">Reset stack</string>
     <string name="stack_reset">Stack reset!</string>
     <string name="stack_empty">Card stack empty!</string>
+    <string name="swipe_left_no">No</string>
+    <string name="swipe_right_yes">Yes</string>
 
 </resources>
