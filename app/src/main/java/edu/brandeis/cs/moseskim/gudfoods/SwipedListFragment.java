@@ -77,15 +77,11 @@ public class SwipedListFragment extends Fragment {
                         @Override
                         public void run() {
                             if (foodList != null) {
-                                SwipedCustomAdapter swipedCustomAdapter = new SwipedCustomAdapter(getContext(), foodList);
+                                SwipedCustomAdapter swipedCustomAdapter = new SwipedCustomAdapter(getContext(), foodList, username);
                                 listView.setAdapter(swipedCustomAdapter);
                             }
                         }
                     });
-                }
-            } else if (types[0] == DynamoDBManagerType.REMOVE_USER_SWIPE) {
-                if (tableStatus.equalsIgnoreCase("ACTIVE")) {
-
                 }
             }
 
@@ -96,10 +92,7 @@ public class SwipedListFragment extends Fragment {
             if (result.getTaskType() == DynamoDBManagerType.LIST_USERS_SWIPES
                     && result.getTableStatus().equalsIgnoreCase("ACTIVE")) {
 
-            } else if (result.getTaskType() == DynamoDBManagerType.REMOVE_USER_SWIPE
-                    && result.getTableStatus().equalsIgnoreCase("ACTIVE")) {
-                // refresh list
-            }else if (!result.getTableStatus().equalsIgnoreCase("ACTIVE")) {
+            } else if (!result.getTableStatus().equalsIgnoreCase("ACTIVE")) {
                 Toast.makeText(
                         SwipedListFragment.this.getActivity(),
                         "The test table is not ready yet.\nTable Status: "

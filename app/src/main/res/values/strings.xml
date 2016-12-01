@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">GudFoods</string>
-    <string name="browse_tab">Browse</string>
-    <string name="swiped_list_tab">Food List</string>
-    <string name="trending_tab">Trending</string>
+    <string name="app_name">GüdFoods</string>
+    <string name="browse_tab">Discover</string>
+    <string name="swiped_list_tab">My List</string>
+    <string name="trending_tab">What\'s Güd</string>
 
     <string name="Username">Username</string>
     <string name="Password">Password</string>

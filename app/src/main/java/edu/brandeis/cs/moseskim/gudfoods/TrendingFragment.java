@@ -26,12 +26,15 @@ public class TrendingFragment extends Fragment {
 
     private View rootView;
     private ListView listView;
+    private String username;
     private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.trending_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView2);
+        username = getArguments().getString("username");
+
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Loading...");
         progressDialog.setCanceledOnTouchOutside(false);
@@ -63,7 +66,7 @@ public class TrendingFragment extends Fragment {
                             @Override
                             public void run() {
                                 if (foodList != null) {
-                                    SwipedCustomAdapter swipedCustomAdapter = new SwipedCustomAdapter(getContext(), foodList);
+                                    SwipedCustomAdapter swipedCustomAdapter = new SwipedCustomAdapter(getContext(), foodList, username);
                                     listView.setAdapter(swipedCustomAdapter);
                                 }
                             }

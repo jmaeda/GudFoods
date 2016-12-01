@@ -128,6 +128,17 @@ public class DynamoDBManager {
         mapper.save(userSwipe);
     }
 
+    public static void deleteUserSwipe(String username, String foodURL) {
+        AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
+        DynamoDBMapper mapper = new DynamoDBMapper(ddb);
+
+        UserSwipe_Dynamo userSwipeDynamo = mapper.load(UserSwipe_Dynamo.class, username, foodURL);
+        if (userSwipeDynamo != null) {
+            userSwipeDynamo.setDeleted(true);
+            mapper.save(userSwipeDynamo);
+        }
+    }
+
     public static int incrementImageIndex(String username, String businessId) {
         AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
