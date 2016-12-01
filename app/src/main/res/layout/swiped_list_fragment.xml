@@ -5,12 +5,34 @@
     android:orientation="vertical"
     android:background="#fff7e5">
 
+    <LinearLayout
+        android:id="@+id/sortBy_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/my_list_sortBy"
+            android:text="@string/sort_by"/>
+
+        <Spinner
+            android:id="@+id/sort_spinner"
+            android:layout_width="@dimen/my_list_sortBy_option_width"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/selection"
+            android:textSize="@dimen/my_list_sortBy" />
+
+    </LinearLayout>
+
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listView2"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/sortBy_layout"
         android:divider="@null"
         android:dividerHeight="10dp"
         android:layout_centerInParent="true" />

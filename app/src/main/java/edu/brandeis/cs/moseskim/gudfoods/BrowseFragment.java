@@ -71,8 +71,8 @@ public class BrowseFragment extends Fragment{
     private String username;
     private String rating;
 
-    double latitude;
-    double longitude;
+    public static double latitude;
+    public static double longitude;
     private View rootView;
     private YelpService yelpService;
     private AsyncTask getYelpToken;

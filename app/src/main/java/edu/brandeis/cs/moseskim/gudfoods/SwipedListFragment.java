@@ -13,7 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.LinkedList;
@@ -34,12 +37,14 @@ public class SwipedListFragment extends Fragment {
     private static ListView listView;
     private String username;
     private ProgressDialog progressDialog;
+    private Spinner sortBy;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "CreateView");
         rootView = inflater.inflate(R.layout.swiped_list_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView2);
+        sortBy = (Spinner) rootView.findViewById(R.id.sort_spinner);
 
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Loading...");
@@ -49,6 +54,36 @@ public class SwipedListFragment extends Fragment {
         username = getArguments().getString("username");
         new DynamoDBSwipedListTask().execute(DynamoDBManagerType.LIST_USERS_SWIPES);
 
+        ArrayAdapter<CharSequence> sortByAdapter = ArrayAdapter.createFromResource(this.getActivity(),
+                R.array.sortByArray , android.R.layout.simple_spinner_item);
+        sortBy.setAdapter(sortByAdapter);
+        sortBy.setSelection(0);
+        sortBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (listView.getAdapter() != null) {
+                    String text = sortBy.getSelectedItem().toString();
+                    SwipedCustomAdapter listAdapter = (SwipedCustomAdapter) listView.getAdapter();
+                    if (text.equals(getString(R.string.sort_by_name))) {
+                        listAdapter.sortBy(MyListSortOrder.NAME);
+                    } else if (text.equals(getString(R.string.sort_by_price_lo_hi))) {
+                        listAdapter.sortBy(MyListSortOrder.PRICE_LO_TO_HI);
+                    } else if (text.equals(getString(R.string.sort_by_price_hi_lo))) {
+                        listAdapter.sortBy(MyListSortOrder.PRICE_HI_TO_LO);
+                    } else if (text.equals(getString(R.string.sort_by_rating))) {
+                        listAdapter.sortBy(MyListSortOrder.RATING);
+                    } else if (text.equals(getString(R.string.sort_by_distance))) {
+                        listAdapter.sortBy(MyListSortOrder.DISTANCE);
+                    }
+                    listAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
+
+        });
 
         return rootView;
     }

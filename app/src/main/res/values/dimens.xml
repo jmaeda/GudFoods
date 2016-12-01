@@ -11,6 +11,9 @@
     <dimen name="advanced_search_text">19sp</dimen>
     <dimen name="advanced_search_title">24sp</dimen>
 
+    <dimen name="my_list_sortBy">23sp</dimen>
+    <dimen name="my_list_sortBy_option_width">30sp</dimen>
+
     <dimen name="activity_intra_group_separation">10dp</dimen>
     <dimen name="activity_inter_group_separation">30dp</dimen>
     <dimen name="activity_button_height">45dp</dimen>

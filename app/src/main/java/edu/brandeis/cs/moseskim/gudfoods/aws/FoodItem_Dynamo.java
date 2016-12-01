@@ -4,7 +4,14 @@ package edu.brandeis.cs.moseskim.gudfoods.aws;
  * Created by Chungyuk on 11/19/2016.
  */
 
+import android.location.Location;
+import android.util.Log;
+
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
+
+import java.util.Comparator;
+
+import edu.brandeis.cs.moseskim.gudfoods.BrowseFragment;
 
 @DynamoDBTable(tableName = "FoodItem")
 public class FoodItem_Dynamo implements Comparable{
@@ -98,6 +105,45 @@ public class FoodItem_Dynamo implements Comparable{
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
+
+    public static final Comparator<FoodItem_Dynamo> NameComparator = new Comparator<FoodItem_Dynamo>() {
+        @Override
+        public int compare(FoodItem_Dynamo o1, FoodItem_Dynamo o2) {
+            return o1.getBusinessName().compareTo(o2.getBusinessName());
+        }
+    };
+
+    public static final Comparator<FoodItem_Dynamo> PriceLoToHiComparator = new Comparator<FoodItem_Dynamo>() {
+        @Override
+        public int compare(FoodItem_Dynamo o1, FoodItem_Dynamo o2) {
+            return o1.getPrice().length() - o2.getPrice().length();
+        }
+    };
+
+    public static final Comparator<FoodItem_Dynamo> PriceHiToLoComparator = new Comparator<FoodItem_Dynamo>() {
+        @Override
+        public int compare(FoodItem_Dynamo o1, FoodItem_Dynamo o2) {
+            return o2.getPrice().length() - o1.getPrice().length();
+        }
+    };
+
+    public static final Comparator<FoodItem_Dynamo> RatingComparator = new Comparator<FoodItem_Dynamo>() {
+        @Override
+        public int compare(FoodItem_Dynamo o1, FoodItem_Dynamo o2) {
+            return (int) ((o2.getRating() - o1.getRating()) * 10);
+        }
+    };
+
+    public static final Comparator<FoodItem_Dynamo> DistanceComparator = new Comparator<FoodItem_Dynamo>() {
+        @Override
+        public int compare(FoodItem_Dynamo o1, FoodItem_Dynamo o2) {
+            float[] results1 = new float[1];
+            Location.distanceBetween(BrowseFragment.latitude, BrowseFragment.longitude, o1.latitude, o1.longitude, results1);
+            float[] results2 = new float[1];
+            Location.distanceBetween(BrowseFragment.latitude, BrowseFragment.longitude, o2.latitude, o2.longitude, results2);
+            return (int) (results1[0] - results2[0]);
+        }
+    };
 
     @Override
     public boolean equals(Object o) {

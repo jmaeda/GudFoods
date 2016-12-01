@@ -9,12 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 
+import java.util.Collections;
 import java.util.List;
 
 import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManager;
@@ -85,8 +85,6 @@ public class SwipedCustomAdapter extends ArrayAdapter<FoodItem_Dynamo> {
         rating.setText(Double.toString(item.getRating()));
         price.setText(item.getPrice());
 
-
-
         return convertview;
     }
 
@@ -94,6 +92,20 @@ public class SwipedCustomAdapter extends ArrayAdapter<FoodItem_Dynamo> {
         entries.add(foodItemDynamo);
     }
 
+    public void sortBy(MyListSortOrder sortOrder) {
+        if (sortOrder == MyListSortOrder.NAME) {
+            Collections.sort(entries, FoodItem_Dynamo.NameComparator);
+        } else if (sortOrder == MyListSortOrder.PRICE_LO_TO_HI) {
+            Collections.sort(entries, FoodItem_Dynamo.PriceLoToHiComparator);
+        } else if (sortOrder == MyListSortOrder.PRICE_HI_TO_LO) {
+            Collections.sort(entries, FoodItem_Dynamo.PriceHiToLoComparator);
+        } else if (sortOrder == MyListSortOrder.RATING) {
+            Collections.sort(entries, FoodItem_Dynamo.RatingComparator);
+        } else if (sortOrder == MyListSortOrder.DISTANCE) {
+            Collections.sort(entries, FoodItem_Dynamo.DistanceComparator);
+        }
+
+    }
 
     public class DynamoDBRemoveSwipeTask extends
             AsyncTask<DynamoDBManagerType, Void, DynamoDBManagerTaskResult> {

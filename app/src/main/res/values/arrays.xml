@@ -28,4 +28,13 @@
         <item>@string/two_mile</item>
         <item>@string/one_mile</item>
     </array>
+
+    <array name="sortByArray">
+        <item>@string/sort_by_nothing</item>
+        <item>@string/sort_by_name</item>
+        <item>@string/sort_by_price_lo_hi</item>
+        <item>@string/sort_by_price_hi_lo</item>
+        <item>@string/sort_by_rating</item>
+        <item>@string/sort_by_distance</item>
+    </array>
 </resources>

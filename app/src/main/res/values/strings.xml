@@ -49,6 +49,12 @@
     <string name="two_mile">2 Miles</string>
     <string name="one_mile">1 Mile</string>
 
+    <string name="sort_by_nothing">...</string>
+    <string name="sort_by_name">Business</string>
+    <string name="sort_by_price_lo_hi">Price:Lo-Hi</string>
+    <string name="sort_by_price_hi_lo">Price:Hi-Lo</string>
+    <string name="sort_by_rating">Rating</string>
+    <string name="sort_by_distance">Distance</string>
 
     <string name="swipe_left">Swipe left</string>
     <string name="swipe_right">Swipe right</string>
@@ -62,5 +68,6 @@
     <string name="stack_empty">Card stack empty!</string>
     <string name="swipe_left_no">No</string>
     <string name="swipe_right_yes">Yes</string>
+    <string name="sort_by">Sort by: </string>
 
 </resources>
