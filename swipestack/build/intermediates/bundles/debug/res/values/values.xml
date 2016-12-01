@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SwipeStack"><attr format="integer" name="allowed_swipe_directions">
+            <enum name="only_left" value="1"/>
+            <enum name="only_right" value="2"/>
+            <enum name="both" value="0"/>
+        </attr><attr format="integer" name="animation_duration"/><attr format="integer" name="stack_size"/><attr format="dimension" name="stack_spacing"/><attr format="integer" name="stack_rotation"/><attr format="float" name="swipe_rotation"/><attr format="float" name="swipe_opacity"/><attr format="float" name="scale_factor"/><attr format="boolean" name="disable_hw_acceleration"/></declare-styleable>
+    <dimen name="default_stack_spacing">12dp</dimen>
+    <item name="new_view" type="id"/>
+    <string name="app_name">SwipeStack</string>
+</resources>
