@@ -1,11 +1,10 @@
-package edu.brandeis.cs.moseskim.gudfoods.aws;
+package edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.model;
 
 /**
  * Created by Chungyuk on 11/19/2016.
  */
 
 import android.location.Location;
-import android.util.Log;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
 

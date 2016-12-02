@@ -23,11 +23,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManager;
-import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerTaskResult;
-import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerType;
-import edu.brandeis.cs.moseskim.gudfoods.aws.FoodItem_Dynamo;
-import edu.brandeis.cs.moseskim.gudfoods.aws.UserSwipe_Dynamo;
+import edu.brandeis.cs.moseskim.gudfoods.adapters.SwipedCustomAdapter;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.DynamoDBManager;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.DynamoDBManagerTaskResult;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.DynamoDBManagerType;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.model.FoodItem_Dynamo;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.model.UserSwipe_Dynamo;
 
 public class SwipedListFragment extends Fragment {
 

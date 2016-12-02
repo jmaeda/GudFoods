@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-package edu.brandeis.cs.moseskim.gudfoods;
+package edu.brandeis.cs.moseskim.gudfoods.aws.cognito;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -43,11 +43,13 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.NewP
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.ForgotPasswordHandler;
 
-import edu.brandeis.cs.moseskim.gudfoods.aws.AWSService;
-import edu.brandeis.cs.moseskim.gudfoods.aws.ForgotPasswordActivity;
-import edu.brandeis.cs.moseskim.gudfoods.aws.NewPassword;
-import edu.brandeis.cs.moseskim.gudfoods.aws.RegisterUser;
-import edu.brandeis.cs.moseskim.gudfoods.aws.SignUpConfirm;
+import edu.brandeis.cs.moseskim.gudfoods.MainActivity;
+import edu.brandeis.cs.moseskim.gudfoods.R;
+import edu.brandeis.cs.moseskim.gudfoods.aws.cognito.AWSService;
+import edu.brandeis.cs.moseskim.gudfoods.aws.cognito.ForgotPasswordActivity;
+import edu.brandeis.cs.moseskim.gudfoods.aws.cognito.NewPassword;
+import edu.brandeis.cs.moseskim.gudfoods.aws.cognito.RegisterUser;
+import edu.brandeis.cs.moseskim.gudfoods.aws.cognito.SignUpConfirm;
 
 import java.util.Locale;
 import java.util.Map;

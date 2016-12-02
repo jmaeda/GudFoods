@@ -1,4 +1,4 @@
-package edu.brandeis.cs.moseskim.gudfoods;
+package edu.brandeis.cs.moseskim.gudfoods.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,10 +18,13 @@ import com.android.volley.toolbox.NetworkImageView;
 import java.util.Collections;
 import java.util.List;
 
-import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManager;
-import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerTaskResult;
-import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerType;
-import edu.brandeis.cs.moseskim.gudfoods.aws.FoodItem_Dynamo;
+import edu.brandeis.cs.moseskim.gudfoods.AppController;
+import edu.brandeis.cs.moseskim.gudfoods.MyListSortOrder;
+import edu.brandeis.cs.moseskim.gudfoods.R;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.DynamoDBManager;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.DynamoDBManagerTaskResult;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.DynamoDBManagerType;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.model.FoodItem_Dynamo;
 
 /**
  * Created by moseskim on 11/22/16.
@@ -35,7 +38,7 @@ public class SwipedCustomAdapter extends ArrayAdapter<FoodItem_Dynamo> {
     private String foodImageURL;
 
     public SwipedCustomAdapter(Context context, List<FoodItem_Dynamo> array, String username){
-        super(context,R.layout.swiped_food_item,array);
+        super(context, R.layout.swiped_food_item,array);
         this.entries = array;
         this.context = context;
         this.username = username;

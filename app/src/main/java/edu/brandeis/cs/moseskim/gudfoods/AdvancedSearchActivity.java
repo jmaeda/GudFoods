@@ -15,8 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import edu.brandeis.cs.moseskim.gudfoods.aws.TemporaryPreferences;
-
 /**
  * Created by Jon on 11/24/2016.
  */

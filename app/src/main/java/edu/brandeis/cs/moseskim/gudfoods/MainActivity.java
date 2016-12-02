@@ -11,11 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import edu.brandeis.cs.moseskim.gudfoods.aws.AWSService;
-import edu.brandeis.cs.moseskim.gudfoods.aws.AmazonClientManager;
-import edu.brandeis.cs.moseskim.gudfoods.aws.FoodItem_Dynamo;
+import edu.brandeis.cs.moseskim.gudfoods.adapters.PagerAdapter;
+import edu.brandeis.cs.moseskim.gudfoods.aws.cognito.AWSService;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.AmazonClientManager;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.model.FoodItem_Dynamo;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();

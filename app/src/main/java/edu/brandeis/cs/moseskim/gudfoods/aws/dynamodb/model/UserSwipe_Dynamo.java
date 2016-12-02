@@ -1,4 +1,4 @@
-package edu.brandeis.cs.moseskim.gudfoods.aws;
+package edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.model;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;

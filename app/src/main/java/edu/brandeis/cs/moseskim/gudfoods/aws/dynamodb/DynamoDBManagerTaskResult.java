@@ -1,4 +1,4 @@
-package edu.brandeis.cs.moseskim.gudfoods.aws;
+package edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb;
 
 /**
  * Created by Chungyuk on 11/27/2016.

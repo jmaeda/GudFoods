@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-package edu.brandeis.cs.moseskim.gudfoods.aws;
+package edu.brandeis.cs.moseskim.gudfoods.aws.cognito;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,7 +23,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -35,6 +34,7 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDel
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.VerificationHandler;
 import edu.brandeis.cs.moseskim.gudfoods.R;
+import edu.brandeis.cs.moseskim.gudfoods.aws.cognito.AWSService;
 
 public class SignUpConfirm extends AppCompatActivity {
     private EditText username;

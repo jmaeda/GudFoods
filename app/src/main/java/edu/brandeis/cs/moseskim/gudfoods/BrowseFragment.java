@@ -44,11 +44,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManager;
-import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerTaskResult;
-import edu.brandeis.cs.moseskim.gudfoods.aws.DynamoDBManagerType;
-import edu.brandeis.cs.moseskim.gudfoods.aws.FoodItem_Dynamo;
-import edu.brandeis.cs.moseskim.gudfoods.aws.TemporaryPreferences;
+import edu.brandeis.cs.moseskim.gudfoods.adapters.SwipeStackAdapter;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.DynamoDBManager;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.DynamoDBManagerTaskResult;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.DynamoDBManagerType;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.model.FoodItem_Dynamo;
 import link.fls.swipestack.SwipeStack;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -545,7 +545,6 @@ public class BrowseFragment extends Fragment{
                     DynamoDBManager.incrementFoodItem(fi, isSwipeRight);
                     DynamoDBManager.insertUserSwipe(username, fi.getImageURL(), isSwipeRight);
                     int x = DynamoDBManager.incrementImageIndex(username, fi.getBusinessId());
-                    Log.d("`1234567890-09876534", "" + x);
                     yelpService.setImageIndex(fi.getBusinessId(), x);
                 }
             } else if (types[0] == DynamoDBManagerType.LIST_USER_BUSINESS_INDEX) {

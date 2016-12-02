@@ -1,4 +1,4 @@
-package edu.brandeis.cs.moseskim.gudfoods.aws;
+package edu.brandeis.cs.moseskim.gudfoods;
 
 /**
  * Created by Jon on 11/27/2016.

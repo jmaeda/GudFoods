@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-package edu.brandeis.cs.moseskim.gudfoods.aws;
+package edu.brandeis.cs.moseskim.gudfoods.aws.cognito;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -32,6 +32,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import edu.brandeis.cs.moseskim.gudfoods.R;
+import edu.brandeis.cs.moseskim.gudfoods.aws.cognito.AWSService;
 
 public class NewPassword extends AppCompatActivity {
     private String TAG = "NewPassword";

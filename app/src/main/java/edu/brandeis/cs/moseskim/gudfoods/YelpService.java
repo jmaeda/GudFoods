@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.brandeis.cs.moseskim.gudfoods.aws.UserBusiness_Dynamo;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.model.UserBusiness_Dynamo;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;

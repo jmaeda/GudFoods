@@ -1,4 +1,4 @@
-package edu.brandeis.cs.moseskim.gudfoods.aws;
+package edu.brandeis.cs.moseskim.gudfoods.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +19,10 @@ import java.util.Set;
 
 import edu.brandeis.cs.moseskim.gudfoods.AppController;
 import edu.brandeis.cs.moseskim.gudfoods.R;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.DynamoDBManager;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.DynamoDBManagerTaskResult;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.DynamoDBManagerType;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.model.FoodItem_Dynamo;
 
 /**
  * Created by alexsuk on 11/30/16.

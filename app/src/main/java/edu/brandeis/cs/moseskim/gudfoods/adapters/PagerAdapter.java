@@ -1,4 +1,4 @@
-package edu.brandeis.cs.moseskim.gudfoods;
+package edu.brandeis.cs.moseskim.gudfoods.adapters;
 
 /**
  * Created by Jon on 11/15/2016.
@@ -8,6 +8,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import edu.brandeis.cs.moseskim.gudfoods.BrowseFragment;
+import edu.brandeis.cs.moseskim.gudfoods.SwipedListFragment;
+import edu.brandeis.cs.moseskim.gudfoods.TrendingFragment;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;

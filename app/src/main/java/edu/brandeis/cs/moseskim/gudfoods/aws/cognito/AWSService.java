@@ -15,18 +15,15 @@
  *  limitations under the License.
  */
 
-package edu.brandeis.cs.moseskim.gudfoods.aws;
+package edu.brandeis.cs.moseskim.gudfoods.aws.cognito;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession;
 import com.amazonaws.regions.Regions;
-import com.amazonaws.services.cognitoidentityprovider.model.AttributeType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -106,15 +103,6 @@ public class AWSService {
 
             // Create a user pool with default ClientConfiguration
             userPool = new CognitoUserPool(context, userPoolId, clientId, clientSecret, cognitoRegion);
-
-            // This will also work
-            /*
-            ClientConfiguration clientConfiguration = new ClientConfiguration();
-            AmazonCognitoIdentityProvider cipClient = new AmazonCognitoIdentityProviderClient(new AnonymousAWSCredentials(), clientConfiguration);
-            cipClient.setRegion(Region.getRegion(cognitoRegion));
-            userPool = new CognitoUserPool(context, userPoolId, clientId, clientSecret, cipClient);
-            */
-
         }
 
         phoneVerified = false;
@@ -141,19 +129,6 @@ public class AWSService {
 
     public static  CognitoUserSession getCurrSession() {
         return currSession;
-    }
-
-    public static void setUserDetails(CognitoUserDetails details) {
-        userDetails = details;
-        refreshWithSync();
-    }
-
-    public static  CognitoUserDetails getUserDetails() {
-        return userDetails;
-    }
-
-    public static String getCurrUser() {
-        return user;
     }
 
     public static void setUser(String newUser) {
@@ -271,48 +246,6 @@ public class AWSService {
         signUpFieldsO2C.put("email_verified", "Email verified");
         signUpFieldsO2C.put("email", "Email");
 
-    }
-
-    private static void refreshWithSync() {
-        // This will refresh the current items to display list with the attributes fetched from service
-        List<String> tempKeys = new ArrayList<>();
-        List<String> tempValues = new ArrayList<>();
-
-        emailVerified = false;
-        phoneVerified = false;
-
-        emailAvailable = false;
-        phoneAvailable = false;
-
-        currUserAttributes.clear();
-
-        for(Map.Entry<String, String> attr: userDetails.getAttributes().getAttributes().entrySet()) {
-
-            tempKeys.add(attr.getKey());
-            tempValues.add(attr.getValue());
-
-            if(attr.getKey().contains("email_verified")) {
-                emailVerified = attr.getValue().contains("true");
-            }
-            else if(attr.getKey().contains("phone_number_verified")) {
-                phoneVerified = attr.getValue().contains("true");
-            }
-
-            if(attr.getKey().equals("email")) {
-                emailAvailable = true;
-            }
-            else if(attr.getKey().equals("phone_number")) {
-                phoneAvailable = true;
-            }
-        }
-
-        // Arrange the input attributes per the display sequence
-        Set<String> keySet = new HashSet<>(tempKeys);
-        for(String det: attributeDisplaySeq) {
-            if(keySet.contains(det)) {
-                currUserAttributes.add(det);
-            }
-        }
     }
 }
 

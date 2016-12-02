@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-package edu.brandeis.cs.moseskim.gudfoods.aws;
+package edu.brandeis.cs.moseskim.gudfoods.aws.cognito;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;

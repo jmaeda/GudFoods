@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package edu.brandeis.cs.moseskim.gudfoods.aws;
+package edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb;
 
 import android.util.Log;
 
@@ -39,6 +39,9 @@ import edu.brandeis.cs.moseskim.gudfoods.Constants;
 import edu.brandeis.cs.moseskim.gudfoods.FoodItem;
 import edu.brandeis.cs.moseskim.gudfoods.MainActivity;
 import edu.brandeis.cs.moseskim.gudfoods.TrendingFragment;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.model.FoodItem_Dynamo;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.model.UserBusiness_Dynamo;
+import edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb.model.UserSwipe_Dynamo;
 
 public class DynamoDBManager {
 

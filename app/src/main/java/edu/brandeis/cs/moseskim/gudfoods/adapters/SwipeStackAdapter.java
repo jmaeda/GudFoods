@@ -1,4 +1,4 @@
-package edu.brandeis.cs.moseskim.gudfoods;
+package edu.brandeis.cs.moseskim.gudfoods.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,10 @@ import android.widget.TextView;
 import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.ArrayList;
+
+import edu.brandeis.cs.moseskim.gudfoods.AppController;
+import edu.brandeis.cs.moseskim.gudfoods.FoodItem;
+import edu.brandeis.cs.moseskim.gudfoods.R;
 
 public class SwipeStackAdapter extends ArrayAdapter<FoodItem> {
 

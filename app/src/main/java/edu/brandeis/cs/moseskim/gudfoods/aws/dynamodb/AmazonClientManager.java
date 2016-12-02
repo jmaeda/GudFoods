@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package edu.brandeis.cs.moseskim.gudfoods.aws;
+package edu.brandeis.cs.moseskim.gudfoods.aws.dynamodb;
 
 import android.content.Context;
 import android.util.Log;
